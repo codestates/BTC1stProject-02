@@ -1,5 +1,8 @@
 const Web3 = require("web3");
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+const NODE_URL =
+  "https://speedy-nodes-nyc.moralis.io/418f8e6973f3c5924015ef94/avalanche/testnet";
+const provider = new Web3.providers.HttpProvider(NODE_URL);
+const web3 = new Web3(provider);
 const { Tx, User } = require("../models");
 
 const getCurrentBlockNumber = async () => await web3.eth.getBlockNumber();
@@ -10,9 +13,9 @@ const getTxIDs = async (startBlkNum, currentBlockNumber) => {
     let txIDs = [];
     for (let j = startBlkNum; j < currentBlockNumber + 1; j++) {
       let block = await web3.eth.getBlock(j);
+      // console.log(`${currentBlockNumber} - ${block.number}`);
       txIDs = txIDs.concat(block.transactions);
     }
-
     return txIDs;
   } catch (e) {
     console.log(e.message);
@@ -37,21 +40,20 @@ const storeTx = async (tx) => {
     where: { tx_hash: tx.hash },
     defaults: {
       tx_hash: tx.hash,
-      from: tx.from,
-      to: tx.to,
-      value: web3.utils.fromWei(tx.value, "ether"),
+      // from: tx.from,
+      // to: tx.to,
+      // value: web3.utils.fromWei(tx.value, "ether"),
       block: tx.blockNumber,
     },
   });
 
-  const balance = await web3.eth.getBalance(tx.to);
-  // console.log(balance);
-  await User.update(
-    {
-      balance: web3.utils.fromWei(balance, "ether"),
-    },
-    { where: { address: tx.to } }
-  );
+  // const balance = await web3.eth.getBalance(tx.to);
+  // await User.update(
+  //   {
+  //     balance: web3.utils.fromWei(balance, "ether"),
+  //   },
+  //   { where: { address: tx.to } }
+  // );
 };
 
 module.exports = {
