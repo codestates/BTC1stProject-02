@@ -12,11 +12,11 @@ const basePath = __dirname;
 let taskRunning = false;
 
 const task = cron.schedule(
-  "*/15 * * * * *", // 30초에 한번씩 실행
+  "*/5 * * * * *", // 30초에 한번씩 실행
   async () => {
     try {
       if (taskRunning) {
-        console.log("returning");
+        // console.log("returning");
         return;
       }
 
