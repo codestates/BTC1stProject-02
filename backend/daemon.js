@@ -4,6 +4,7 @@ const {
   getTxIDs,
   getTxs,
   storeTx,
+  getNewTxs,
 } = require("./utils/daemon");
 const fs = require("fs");
 const path = require("path");
@@ -48,11 +49,14 @@ const task = cron.schedule(
       }
 
       console.log(startBlockNumber, currentBlockNumber);
+      if (startBlockNumber > currentBlockNumber) {
+        return;
+      }
 
-      const txIDs = await getTxIDs(startBlockNumber, currentBlockNumber);
-      // console.log(txIDs);
-      const txs = await getTxs(txIDs);
-      // console.log(txs);
+      // const txIDs = await getTxIDs(startBlockNumber, currentBlockNumber);
+      // const txs = await getTxs(txIDs);
+
+      const txs = await getNewTxs(startBlockNumber, currentBlockNumber);
 
       const works = [];
 
