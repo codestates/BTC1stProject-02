@@ -8,8 +8,16 @@ const {
 const fs = require("fs");
 const path = require("path");
 const basePath = __dirname;
+const db = require("./models");
+
+// 시작 시 DB 테이블(Txes, Users) 지운 다음, 다시 생성
+const init = async () => {
+  await db.sequelize.sync({ force: true });
+};
+init();
 
 let taskRunning = false;
+let FIRST = true;
 
 const task = cron.schedule(
   "*/5 * * * * *", // 30초에 한번씩 실행
@@ -34,8 +42,9 @@ const task = cron.schedule(
       // TODO: (삭제 예정) 시작 블록 넘버가 현재 블록 넘버보다 3 이상 크면
       //       현재 블록 넘버 - 3 부터 시작
 
-      if (startBlockNumber + 3 < currentBlockNumber) {
+      if (FIRST) {
         startBlockNumber = currentBlockNumber - 3;
+        FIRST = false;
       }
 
       console.log(startBlockNumber, currentBlockNumber);
@@ -74,7 +83,5 @@ const task = cron.schedule(
     scheduled: false,
   }
 );
-
-task.start();
 
 task.start();
