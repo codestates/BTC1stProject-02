@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+var cors = require("cors");
 // const account = require("./routes/account");
 const transaction = require("./routes/transaction.js");
 // const Web3 = require("web3");
@@ -9,6 +10,12 @@ const PORT = 4000;
 // const web3 = new Web3(new Web3.providers.HttpProvider(BLOCKCHAIN_NETWORK));
 // global.web3 = web3;
 
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // web3.eth.getAccounts().then((accounts) => {
