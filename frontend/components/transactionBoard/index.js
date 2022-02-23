@@ -31,7 +31,7 @@ const TransactionBoard = () => {
     isLoading,
     isError,
   } = useQuery("getTransactions", () => getTransactions(), {
-    refetchInterval: 3000,
+    refetchInterval: 2000,
     refetchIntervalInBackground: false,
     keepPreviousData: true,
     notifyOnChangeProps: "tracked",

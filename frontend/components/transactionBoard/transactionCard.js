@@ -31,6 +31,7 @@ const TransactionCard = ({ tx }) => {
     to: { opacity: 1 },
     from: { opacity: 0 },
     reset: true,
+    config: { duration: 1000 },
   });
 
   return (
