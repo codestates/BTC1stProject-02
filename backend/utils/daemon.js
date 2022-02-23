@@ -40,9 +40,9 @@ const storeTx = async (tx) => {
     where: { tx_hash: tx.hash },
     defaults: {
       tx_hash: tx.hash,
-      // from: tx.from,
-      // to: tx.to,
-      // value: web3.utils.fromWei(tx.value, "ether"),
+      from: tx.from,
+      to: tx.to,
+      value: web3.utils.fromWei(tx.value, "ether"),
       block: tx.blockNumber,
     },
   });
