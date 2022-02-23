@@ -1,10 +1,14 @@
 import { AppProps } from "next/app";
+import React from "react";
 import Head from "next/head";
 import { MantineProvider } from "@mantine/core";
 import Layout from "../components/layout";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 export default function App(props) {
   const { Component, pageProps } = props;
+  const [queryClient] = React.useState(() => new QueryClient());
 
   return (
     <>
@@ -25,7 +29,10 @@ export default function App(props) {
         }}
       >
         <Layout>
-          <Component {...pageProps} />
+          <QueryClientProvider client={queryClient}>
+            <Component {...pageProps} />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
         </Layout>
       </MantineProvider>
     </>
