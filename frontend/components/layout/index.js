@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { Text } from "@mantine/core";
 import Header from "../header";
+import Wallet from "../wallet";
 
 const Content = styled.div`
   height: calc(100vh - 50px);
@@ -14,6 +15,7 @@ const Layout = ({ children }) => {
       <Header />
       <Content>
         <Text>{children}</Text>
+        <Wallet />
       </Content>
     </div>
   );
