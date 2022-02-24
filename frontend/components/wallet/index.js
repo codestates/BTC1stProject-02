@@ -1,7 +1,10 @@
 import { Modal } from "@mantine/core";
 import { useStore } from "../../utils/store";
 import Asset from "./asset";
+import CreateWallet from "./createWallet";
+import CreateWalletPassword from "./createWalletPassword";
 import Login from "./login";
+import PrivateKeyInfo from "./privateKeyInfo";
 import Restore from "./restore";
 import Sign from "./sign";
 import TransferAmount from "./transferAmount";
@@ -24,6 +27,9 @@ const Wallet = () => {
     TRANSFER_TO: <TransferTo />,
     TRANSFER_AMOUNT: <TransferAmount />,
     SIGN: <Sign />,
+    CREATE_WALLET: <CreateWallet />,
+    CREATE_WALLET_PASSWORD: <CreateWalletPassword />,
+    PRIVATE_KEY_INFO: <PrivateKeyInfo />,
   };
 
   return (
@@ -31,7 +37,7 @@ const Wallet = () => {
       opened={opened}
       onClose={() => {
         setOpened(false);
-        setActiveTab("TRANSFER_AMOUNT");
+        setActiveTab("CREATE_WALLET");
       }}
       title="BTC - 02 - AVALANCHE"
     >

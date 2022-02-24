@@ -4,7 +4,7 @@ import { useStore } from "../../utils/store";
 const Login = () => {
   const setActiveTab = useStore((state) => state.setActiveTab);
   return (
-    <div style={{ height: "500px" }}>
+    <div>
       로그인 페이지
       <Input variant="default" placeholder="Password" />
       <div style={{ display: "flex", justifyContent: "center" }}>
