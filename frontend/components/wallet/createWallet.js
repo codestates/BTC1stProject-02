@@ -3,6 +3,7 @@ import { RiDownloadFill } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai";
 import { Button } from "@mantine/core";
 import { useStore } from "../../utils/store";
+import { WalletContainer, WalletContent, WalletTitle } from "./style";
 
 const WrapperContainer = styled.div`
   display: flex;
@@ -26,6 +27,7 @@ const CreateWallet = () => {
   return (
     <div>
       <p>월렛 생성</p>
+
       <WrapperContainer>
         <Wrapper
           style={{ marginBottom: "20px" }}
