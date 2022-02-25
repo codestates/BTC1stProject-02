@@ -1,8 +1,20 @@
 import { Button, Input } from "@mantine/core";
+import axios from "axios";
 import { useStore } from "../../utils/store";
 
+const createUser = async () => {
+  const {
+    data: { newUser },
+  } = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/user`);
+
+  return newUser;
+};
+
 const CreateWalletPassword = () => {
-  const setActiveTab = useStore((state) => state.setActiveTab);
+  const [setActiveTab, setUser] = useStore((state) => [
+    state.setActiveTab,
+    state.setUser,
+  ]);
 
   return (
     <div>
@@ -11,14 +23,24 @@ const CreateWalletPassword = () => {
         style={{ marginBottom: "15px" }}
         variant="default"
         placeholder="Password"
+        type="password"
       />
       <Input
         style={{ marginBottom: "15px" }}
         variant="default"
         placeholder="Password 확인"
+        type="password"
       />
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <Button onClick={() => setActiveTab("PRIVATE_KEY_INFO")}>생성</Button>
+        <Button
+          onClick={async () => {
+            const user = await createUser();
+            setUser(user);
+            setActiveTab("PRIVATE_KEY_INFO");
+          }}
+        >
+          생성
+        </Button>
       </div>
     </div>
   );

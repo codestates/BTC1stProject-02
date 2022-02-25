@@ -1,9 +1,12 @@
 import { Button } from "@mantine/core";
 import { useStore } from "../../utils/store";
-import { WalletContainer, WalletContent, WalletTitle } from "./style";
 
 const Asset = () => {
-  const setActiveTab = useStore((state) => state.setActiveTab);
+  const [user, setActiveTab] = useStore((state) => [
+    state.user,
+    state.setActiveTab,
+  ]);
+  console.log(user);
 
   return (
     <div>

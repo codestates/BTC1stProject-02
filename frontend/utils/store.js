@@ -10,4 +10,15 @@ export const useStore = create((set) => ({
       previousTab: state.activeTab,
       activeTab,
     })),
+  user: {
+    address: null,
+  },
+  setUser: (user) => set({ user }),
+  updateUser: (key, value) =>
+    set((state) => ({
+      user: {
+        ...state.user,
+        [key]: value,
+      },
+    })),
 }));
