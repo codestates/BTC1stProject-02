@@ -14,13 +14,15 @@ const makeSalt = (length) => {
 };
 
 const getToken = (user) => {
-  return jwt.sign({ address: user.address }, "BTC-PROJECT-02");
+  return jwt.sign({ address: user.address }, process.env.TOKEN_SECRET);
 };
 
 module.exports = {
-  user: async (req, res) => {
+  createUser: async (req, res) => {
     try {
       const { password } = req.body;
+      console.log(password);
+      console.log(process.env.TOKEN_SECRET);
 
       const { address, privateKey } = await web3.eth.accounts.create();
       const salt = makeSalt(18);
@@ -83,5 +85,52 @@ module.exports = {
       address: user.address,
       accessToken: token,
     });
+  },
+  getUser: async (req, res) => {
+    const address = req.address;
+    const resBalance = web3.utils.fromWei(
+      await web3.eth.getBalance(address),
+      "ether"
+    );
+    console.log(resBalance);
+
+    const user = await User.findOne({
+      where: {
+        address,
+      },
+    });
+
+    if (resBalance !== user.balance) {
+      user.balance = resBalance;
+      await user.save();
+    }
+
+    return res.status(200).json({
+      user: {
+        address: user.address,
+        balance: user.balance,
+      },
+    });
+  },
+  verifyToken: (req, res, next) => {
+    const token = req.headers["x-access-token"];
+
+    if (!token) {
+      // return res.status(403).json("message: 인증을 위한 토큰을 전송해주세요.");
+      throw new Error("인증을 위한 토큰을 전송해주세요.");
+    } else {
+      jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+          // return res
+          //   .status(401)
+          //   .json({ message: "유효하지 않은 토큰입니다. 인증에 실패하였습니다." });
+          throw new Error("유효하지 않은 토큰입니다. 인증에 실패하였습니다.");
+        } else {
+          // console.log(decoded);
+          req.address = decoded.address;
+          next();
+        }
+      });
+    }
   },
 };

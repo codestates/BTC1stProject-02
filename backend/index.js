@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 var cors = require("cors");
 // const account = require("./routes/account");
+require("dotenv").config();
 const transaction = require("./routes/transaction.js");
 const user = require("./routes/user.js");
 // const Web3 = require("web3");
