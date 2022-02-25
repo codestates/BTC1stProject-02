@@ -13,7 +13,7 @@ const db = require("./models");
 
 // 시작 시 DB 테이블(Txes, Users) 지운 다음, 다시 생성
 const init = async () => {
-  await db.sequelize.sync({ force: true });
+  await db.Tx.sync({ force: true });
 };
 init();
 
