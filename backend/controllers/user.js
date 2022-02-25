@@ -1,15 +1,20 @@
 const { User } = require("../models");
-var CryptoJS = require("crypto-js");
+const CryptoJS = require("crypto-js");
+const jwt = require("jsonwebtoken");
 
 const makeSalt = (length) => {
-  var result = "";
-  var characters =
+  let result = "";
+  const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  var charactersLength = characters.length;
-  for (var i = 0; i < length; i++) {
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
+};
+
+const getToken = (user) => {
+  return jwt.sign({ address: user.address }, "BTC-PROJECT-02");
 };
 
 module.exports = {
@@ -27,15 +32,16 @@ module.exports = {
       // var bytes = CryptoJS.AES.decrypt(encryptedPk, salt);
       // var originalText = bytes.toString(CryptoJS.enc.Utf8);
 
-      const newUser = await User.create({
+      const user = await User.create({
         address,
         pk: encryptedPk,
         salt,
         password: CryptoJS.SHA256(password).toString(),
       });
+      const token = getToken(user);
 
       res.status(200).send({
-        newUser,
+        newUser: { address, pk: privateKey, accessToken: token },
       });
     } catch (err) {
       console.log(err);
@@ -44,5 +50,38 @@ module.exports = {
         errMsg: err,
       });
     }
+  },
+  login: async (req, res) => {
+    const { address, password } = req.body;
+    console.log(address, password);
+
+    const user = await User.findOne({
+      where: {
+        address,
+      },
+    });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "입력하신 Address는 존재하지 않습니다." });
+    }
+    console.log(user);
+
+    const passwordIsValid = CryptoJS.SHA256(password).toString() === password;
+    console.log(passwordIsValid);
+
+    if (!passwordIsValid) {
+      return res.status(401).json({
+        accessToken: null,
+        message: "Address에 해당하는 Password가 일치하지 않습니다.",
+      });
+    }
+    const token = getToken(user);
+
+    res.status(200).json({
+      address: user.address,
+      accessToken: token,
+    });
   },
 };
