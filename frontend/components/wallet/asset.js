@@ -30,10 +30,23 @@ const Asset = () => {
   return (
     <div>
       <p>ASSET 페이지</p>
-      <div>
-        {console.log(user)}
-        <div>{user?.balance} AVAX</div>
-        <Button onClick={() => setActiveTab("TRANSFER_TO")}>보내기</Button>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ marginBottom: "15px" }}>
+          <span>잔액: </span>
+          <span>{user?.balance} AVAX</span>
+        </div>
+        <Button
+          style={{ marginBottom: "15px" }}
+          onClick={() => setActiveTab("TRANSFER_TO")}
+        >
+          보내기
+        </Button>
         <div>활동내역</div>
       </div>
     </div>
