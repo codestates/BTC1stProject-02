@@ -18,6 +18,14 @@ const CreateWalletPassword = () => {
       password,
     });
 
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        address: newUser.address,
+        accessToken: newUser.accessToken,
+      })
+    );
+
     return newUser;
   };
 

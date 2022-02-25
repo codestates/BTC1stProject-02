@@ -30,13 +30,6 @@ const PrivateKeyInfo = () => {
           <Button
             onClick={() => {
               updateUser("pk", null);
-              localStorage.setItem(
-                "user",
-                JSON.stringify({
-                  address: user.address,
-                  accessToken: user.accessToken,
-                })
-              );
               setActiveTab("ASSET");
             }}
           >

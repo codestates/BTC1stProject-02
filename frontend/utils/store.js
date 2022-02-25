@@ -1,4 +1,6 @@
+import axios from "axios";
 import create from "zustand";
+import { authHeader } from "./auth";
 
 export const useStore = create((set) => ({
   opened: false,
@@ -10,10 +12,17 @@ export const useStore = create((set) => ({
       previousTab: state.activeTab,
       activeTab,
     })),
+  Axios: null,
   user: {
     address: null,
   },
-  setUser: (user) => set({ user }),
+  setUser: (user) =>
+    set({
+      user,
+      Axios: axios.create({
+        headers: authHeader(),
+      }),
+    }),
   updateUser: (key, value) =>
     set((state) => ({
       user: {
@@ -24,4 +33,8 @@ export const useStore = create((set) => ({
 
   web3: null,
   setWeb3: (web3) => set({ web3 }),
+  sendingAmount: null,
+  setSendingAmount: (sendingAmount) => set({ sendingAmount }),
+  receiverAddress: null,
+  setReceiverAddress: (receiverAddress) => set({ receiverAddress }),
 }));

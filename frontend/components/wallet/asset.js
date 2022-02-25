@@ -1,7 +1,6 @@
 import { Button } from "@mantine/core";
 import { useCallback, useEffect } from "react";
 import { useStore } from "../../utils/store";
-import { Axios } from "../layout";
 
 const Asset = () => {
   const [user, updateUser, setActiveTab] = useStore((state) => [
@@ -9,6 +8,7 @@ const Asset = () => {
     state.updateUser,
     state.setActiveTab,
   ]);
+  const Axios = useStore((state) => state.Axios);
 
   const getUser = useCallback(async () => {
     if (user) {
