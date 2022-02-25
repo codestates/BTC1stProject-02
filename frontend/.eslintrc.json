@@ -1,8 +1,6 @@
 {
   "extends": [
     "next/core-web-vitals",
-    "next/babel",
-    "plugin:prettier/recommended",
     "eslint:recommended"
   ],
   "env": {
@@ -12,5 +10,5 @@
   },
   "parserOptions": {
     "ecmaVersion": 2017
-  },
+  }
 }

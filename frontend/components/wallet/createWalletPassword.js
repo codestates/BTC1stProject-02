@@ -7,8 +7,16 @@ const CreateWalletPassword = () => {
   return (
     <div>
       <p>암호 생성</p>
-      <Input variant="default" placeholder="Password" />
-      <Input variant="default" placeholder="Password 확인" />
+      <Input
+        style={{ marginBottom: "15px" }}
+        variant="default"
+        placeholder="Password"
+      />
+      <Input
+        style={{ marginBottom: "15px" }}
+        variant="default"
+        placeholder="Password 확인"
+      />
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Button onClick={() => setActiveTab("PRIVATE_KEY_INFO")}>생성</Button>
       </div>
