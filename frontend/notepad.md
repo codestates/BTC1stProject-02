@@ -1,10 +1,11 @@
 ## 지갑 생성
 web3.eth.accounts.create();
+- 비밀번호 입력
 - address 반환
 - pk 반환
 
 로컬 스토리지에 address 저장
-pk는 db에 양방향 암호화(AES256)해서 저장 (단방향 암호화하면 송금할 때 pk로 서명을 할 수가 없으니)
+pk는 db에 양방향 암호화(AES256)해서 저장 (단방향 암호화하면 트랜잭션 보낼 때 pk로 서명을 할 수가 없으니)
 password 별도 저장
 
 User 테이블

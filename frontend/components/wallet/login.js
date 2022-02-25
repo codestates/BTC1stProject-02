@@ -1,6 +1,5 @@
-import { Button, Input, Text } from "@mantine/core";
+import { Button, Input } from "@mantine/core";
 import { useStore } from "../../utils/store";
-import { WalletContainer, WalletContent, WalletTitle } from "./style";
 
 const Login = () => {
   const setActiveTab = useStore((state) => state.setActiveTab);
