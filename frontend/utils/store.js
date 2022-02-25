@@ -21,4 +21,7 @@ export const useStore = create((set) => ({
         [key]: value,
       },
     })),
+
+  web3: null,
+  setWeb3: (web3) => set({ web3 }),
 }));

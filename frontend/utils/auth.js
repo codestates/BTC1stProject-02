@@ -22,12 +22,15 @@ export const logout = () => {
 };
 
 export const getCurrentUser = () => {
-  return JSON.parse(localStorage.getItem("user"));
+  if (typeof window !== "undefined") {
+    // Perform localStorage action
+    return JSON.parse(localStorage.getItem("user"));
+  }
 };
 
 // 서버가 express인 경우
 export const authHeader = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = getCurrentUser();
 
   if (user && user.accessToken) {
     return { "x-access-token": user.accessToken };

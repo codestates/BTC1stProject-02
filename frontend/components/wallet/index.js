@@ -1,4 +1,6 @@
 import { Modal } from "@mantine/core";
+import { useEffect } from "react";
+import { getCurrentUser } from "../../utils/auth";
 import { useStore } from "../../utils/store";
 import Asset from "./asset";
 import CreateWallet from "./createWallet";
@@ -20,7 +22,7 @@ const Wallet = () => {
     state.setActiveTab,
   ]);
 
-  const obj = {
+  const walletTabs = {
     LOGIN: <Login />,
     RESTORE: <Restore />,
     ASSET: <Asset />,
@@ -32,6 +34,16 @@ const Wallet = () => {
     PRIVATE_KEY_INFO: <PrivateKeyInfo />,
   };
 
+  useEffect(() => {
+    if (opened) {
+      const user = getCurrentUser();
+
+      if (user?.address && user?.accessToken) {
+        setActiveTab("ASSET");
+      }
+    }
+  }, [opened, setActiveTab]);
+
   return (
     <Modal
       opened={opened}
@@ -41,7 +53,7 @@ const Wallet = () => {
       }}
       title="BTC - 02 - AVALANCHE"
     >
-      {obj[activeTab]}
+      {walletTabs[activeTab]}
     </Modal>
   );
 };
