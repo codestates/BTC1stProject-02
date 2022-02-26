@@ -308,7 +308,7 @@ $ curl -X POST --data '{
 }
 ```
 
-### 4. AVAX 가져오기
+### 4. AVAX 얻기 (P-Chain → X-Chain으로 자산 가져오기)
 
 네트워크를 실행할 때 AVAX를 가져올 수 있는 [사전 자금 지원](https://docs.avax.network/build/tutorials/platform/create-a-local-test-network#getting-avax) X-Chain 개인 키가 있습니다. 
 
@@ -377,7 +377,7 @@ curl --location --request POST '127.0.0.1:9650/ext/bc/X' \
 }
 ```
 
-### 5. 트랜잭션 생성 (코인 전송)
+### 5. 트랜잭션 생성 (토큰 전송)
 
 `[avm.send](https://docs.avax.network/build/avalanchego-apis/x-chain/#avmsend)`를 이용해 자산을 주소로 전송합니다.
 
@@ -640,3 +640,240 @@ curl -X POST --data '{
    "id":1
 }
 ```
+
+---
+
+# Cross-Chain Transfer
+
+AVAX 토큰은 거래가 가능한 X-Chain, Primary Network를 검증할 때 지분으로 제공될 수 있는 P-Chain, 스마트 계약에 사용할 수 있는 C-Chain에 존재합니다. 이 거래는 가스 비용을 지불하고 이루어집니다.
+
+## X-Chain ↔ C-Chain 간 AVAX 정송
+
+해당 내용은 API 호출을 통해 X-Chain에서 C-Chain으로 전송하는 방법을 보여줍니다.
+
+교차 체인 전송은 두 가지 트랜잭션을 수행해야합니다.
+
+- X-Chain에서 AVAX 내보내기
+- AVAX를 C-Chain으로 가져오기
+
+토근 전송 전후의 자산을 비교해보세요.
+
+### 1. X-Chain 에서 C-Chain으로 AVAX 전송
+
+X-Chain은 Bech32 주소를 사용하고, C-Chain은 16진 EVM주소를 사용합니다. 주소는 모두 단방향 암호화 기능을 사용하는 개인키에서 파생되므로 한 형식에서 다른 형식으로 주소를 변환할 수 있는 방법이 없습니다.
+
+이 문제를 해결하기 위해 X-Chain에서 개인 키를 내보낸 다음 C-Chain으로 가져올 수 있습니다. 
+
+이 방법을 통해 X-Chain 주소를 사용하고 ‘X-’ 접두사를 ‘C-’ 접두사로 변경하여 C-Chain에 사용할 Bech32 주소를 얻을 수 있습니다.
+
+- X-Chain의 개인키를 가져옵니다.
+
+```
+curl -X POST --data '{
+    "jsonrpc":"2.0",
+    "id"     :1,
+    "method" :"avm.exportKey",
+    "params" :{
+        "username" :"user",
+        "password":"1q2w!Q@W",
+        "address": "X-local1vxsmdjp2w7myjucvx5tz8y7y4ltv6ajykyzc5m"
+    }
+}' -H 'content-type:application/json;' 127.0.0.1:9650/ext/bc/X
+```
+
+출력값
+
+```
+{
+   "jsonrpc":"2.0",
+   "result":{
+      "privateKey":"PrivateKey-9wLyQzhob3YQ8j8E9GMT56ENRPQ7xmnW5PWoN9o9tbsqXaSEe"
+   },
+   "id":1
+}
+```
+
+- X-Chain의 개인키를 C-Chain으로 가져옵니다.
+
+```
+curl -X POST --data '{  
+    "jsonrpc":"2.0",    
+    "id"     :1,    
+    "method" :"avax.importKey", 
+    "params" :{ 
+        "username" :"user",   
+        "password":"1q2w!Q@W",    
+        "privateKey":"PrivateKey-9wLyQzhob3YQ8j8E9GMT56ENRPQ7xmnW5PWoN9o9tbsqXaSEe"    
+    }   
+}' -H 'content-type:application/json;' 127.0.0.1:9650/ext/bc/C/avax
+```
+
+출력값
+
+```
+{
+   "jsonrpc":"2.0",
+   "result":{
+      "address":"0xD2eaBE72D124306e10ce58c329aEF45F0662C33C"
+   },
+   "id":1
+}
+```
+
+응답에는 16진수로 인코딩된 EVM 주소가 포함됩니다.
+
+- x-chain 토큰을 c-chain으로 전송
+    
+    내보낸 개인 키에 해당하는 주소(`local1vxsmdjp2w7myjucvx5tz8y7y4ltv6ajykyzc5m`)를 사용하여 `avm.export`를 호출하여 ‘C-’접두사를 사용하도록 전환합니다.
+    
+
+```
+curl -X POST --data '{
+    "jsonrpc":"2.0",
+    "id"     :1,
+    "method" :"avm.export",
+    "params" :{
+        "to":"C-local1vxsmdjp2w7myjucvx5tz8y7y4ltv6ajykyzc5m",
+        "amount": 10000000,
+        "assetID": "AVAX",
+        "from":["X-local1vxsmdjp2w7myjucvx5tz8y7y4ltv6ajykyzc5m"],
+        "changeAddr":"",
+        "username":"user",
+        "password":"1q2w!Q@W"
+    }
+}' -H 'content-type:application/json;' 127.0.0.1:9650/ext/bc/X
+```
+
+출력값
+
+```
+{
+   "jsonrpc":"2.0",
+   "result":{
+      "txID":"2RXjHC4tQmcxCQoaHD44jUni72dKR8pDwDkuwtxCkMQT8nmUPL",
+      "changeAddr":"X-local1vxsmdjp2w7myjucvx5tz8y7y4ltv6ajykyzc5m"
+   },
+   "id":1
+}
+```
+
+수출입 거래 모두 거래 수수료를 부과하므로 수출 금액이 거래 수수료를 초과하는지 확인하십시오.
+
+### 2. AVAX를 C-Chain으로 가져오기
+
+전송을 완료하기 위해 avm.import 호출합니다.
+
+```
+curl -X POST --data '{
+    "jsonrpc":"2.0",
+    "id"     :1,    
+    "method" :"avax.import",
+    "params" :{ 
+        "to":"0xD2eaBE72D124306e10ce58c329aEF45F0662C33C",  
+        "sourceChain":"X",  
+        "username":"user",    
+        "password":"1q2w!Q@W" 
+    }   
+}' -H 'content-type:application/json;' 127.0.0.1:9650/ext/bc/C/avax
+```
+
+출력값 
+
+```
+{
+   "jsonrpc":"2.0",
+   "result":{
+      "txID":"2d7gQvXxp567Rm5ZfVwjEmAVarqTgB3T3Vv7sZ71RepRm9PKrk"
+   },
+   "id":1
+}
+```
+
+### 3. C-Chain으로 전송받은 토큰 확인
+
+```
+curl --location --request POST 'localhost:9650/ext/bc/C/rpc' --header 'Content-Type: application/json' --data-raw '{
+    "jsonrpc": "2.0",
+    "method": "eth_getBalance",
+    "params": [
+        "0xD2eaBE72D124306e10ce58c329aEF45F0662C33C",
+        "latest"
+    ],
+    "id": 1
+}'
+```
+
+출력값
+
+```
+{
+   "jsonrpc":"2.0",
+   "id":1,
+   "result":"0x18b22cd1401a00"
+}
+```
+
+### 4. C-Chain 에서 X-Chain으로 AVAX 전송
+
+C-Chain에서 X-Chain으로 자산을 내보내기 위해 `avax.export` 메서드를 호출합니다.
+
+```
+curl -X POST --data '{
+    "jsonrpc":"2.0",
+    "id"     :1,
+    "method" :"avax.export",
+    "params" :{
+        "to":"X-local1vxsmdjp2w7myjucvx5tz8y7y4ltv6ajykyzc5m",
+        "amount": 500,
+        "assetID": "AVAX",
+        "username":"user",
+        "password":"1q2w!Q@W"
+    }
+}' -H 'content-type:application/json;' 127.0.0.1:9650/ext/bc/C/avax
+```
+
+출력값
+
+```
+{
+   "jsonrpc":"2.0",
+   "result":{
+      "txID":"2Fy3MaTnYhcYQ5wnnTLZXwqv9vvyD9d496uq1WF6F1gLQWAfxk"
+   },
+   "id":1
+}
+```
+
+X-Chain으로의 자산 이전을 완료하기 위해 `avm.import` 메서드를 호출합니다.
+
+```
+curl -X POST --data '{
+    "jsonrpc":"2.0",
+    "id"     :1,
+    "method" :"avm.import",
+    "params" :{
+        "to":"X-local1vxsmdjp2w7myjucvx5tz8y7y4ltv6ajykyzc5m",
+        "sourceChain":"C",
+        "username":"user",
+        "password":"1q2w!Q@W"
+    }
+}' -H 'content-type:application/json;' 127.0.0.1:9650/ext/bc/X
+```
+
+출력값
+
+```
+{
+   "jsonrpc":"2.0",
+   "result":{
+      "txID":"2REmvsEX3Ybo7T4WYdxzW2oEixGh6gS7gGDLeJbgr1k5Bygepy"
+   },
+   "id":1
+}
+```
+
+---
+
+# 아발란체 로컬 네트워크 이미지 다운로드
+
+[Docker Image](https://www.notion.so/Docker-Image-505846b8e00e44298afbb29e531786de)
