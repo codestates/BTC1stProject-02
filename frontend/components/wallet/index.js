@@ -12,6 +12,7 @@ import Sign from "./sign";
 import TransferAmount from "./transferAmount";
 import TransferTo from "./transferTo";
 import { ToastContainer } from "react-toastify";
+import WalletHeader from "./header";
 
 const Wallet = () => {
   const [opened, setOpened] = useStore((state) => [
@@ -22,6 +23,8 @@ const Wallet = () => {
     state.activeTab,
     state.setActiveTab,
   ]);
+
+  const user = useStore((state) => state.user);
 
   const walletTabs = {
     LOGIN: <Login />,
@@ -37,13 +40,18 @@ const Wallet = () => {
 
   useEffect(() => {
     if (opened) {
-      const user = getCurrentUser();
+      const storageUser = getCurrentUser();
 
-      if (user?.address && user?.accessToken) {
+      if (storageUser?.address && storageUser?.accessToken && !user?.pk) {
         setActiveTab("ASSET");
+      } else if (
+        storageUser?.address &&
+        storageUser?.accessToken === undefined
+      ) {
+        setActiveTab("LOGIN");
       }
     }
-  }, [opened, setActiveTab]);
+  }, [opened, setActiveTab, user]);
 
   return (
     <>
@@ -55,6 +63,7 @@ const Wallet = () => {
         }}
         title="BTC - 02 - AVALANCHE"
       >
+        {user?.accessToken && <WalletHeader />}
         {walletTabs[activeTab]}
       </Modal>
       <ToastContainer
