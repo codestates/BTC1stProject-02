@@ -1,6 +1,7 @@
 const { User } = require("../models");
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
+const { response } = require("express");
 
 const makeSalt = (length) => {
   let result = "";
@@ -58,28 +59,65 @@ const sendTransaction = async (fromAddress, toAddress, pk, amount, web3) => {
   // .on("receipt", console.log);
 };
 
+const createUser = async (password, address = null, privateKey = null) => {
+  let newAccount;
+  if (!address && !privateKey) {
+    newAccount = await web3.eth.accounts.create();
+    address = newAccount.address;
+    privateKey = newAccount.privateKey;
+  }
+  const salt = makeSalt(18);
+
+  // Encrypt
+  const encryptedPk = CryptoJS.AES.encrypt(privateKey, salt).toString();
+
+  // Decrypt
+  // const bytes = CryptoJS.AES.decrypt(encryptedPk, salt);
+  // const originalText = bytes.toString(CryptoJS.enc.Utf8);
+
+  const user = await User.create({
+    address,
+    pk: encryptedPk,
+    salt,
+    password: CryptoJS.SHA256(password).toString(),
+  });
+
+  const token = getToken(user);
+
+  return [address, privateKey, token];
+};
+
+const login = async (address, password, res) => {
+  const user = await getUser(address);
+
+  if (!user) {
+    return res
+      .status(404)
+      .json({ message: "입력하신 Address는 존재하지 않습니다." });
+  }
+
+  const passwordIsValid =
+    CryptoJS.SHA256(password).toString() === user.password;
+
+  if (!passwordIsValid) {
+    return res.status(401).json({
+      accessToken: null,
+      message: "Address에 해당하는 Password가 일치하지 않습니다.",
+    });
+  }
+  const token = getToken(user);
+
+  return res.status(200).json({
+    address: user.address,
+    accessToken: token,
+  });
+};
+
 module.exports = {
   createUser: async (req, res) => {
     try {
       const { password } = req.body;
-
-      const { address, privateKey } = await web3.eth.accounts.create();
-      const salt = makeSalt(18);
-
-      // Encrypt
-      const encryptedPk = CryptoJS.AES.encrypt(privateKey, salt).toString();
-
-      // Decrypt
-      // const bytes = CryptoJS.AES.decrypt(encryptedPk, salt);
-      // const originalText = bytes.toString(CryptoJS.enc.Utf8);
-
-      const user = await User.create({
-        address,
-        pk: encryptedPk,
-        salt,
-        password: CryptoJS.SHA256(password).toString(),
-      });
-      const token = getToken(user);
+      const [address, privateKey, token] = await createUser(password);
 
       res.status(200).send({
         newUser: { address, pk: privateKey, accessToken: token },
@@ -92,32 +130,50 @@ module.exports = {
       });
     }
   },
+  restore: async (req, res) => {
+    try {
+      // pk, password 입력으로 받는다
+      const { pk, password } = req.body;
+
+      const account = await web3.eth.accounts.privateKeyToAccount(pk);
+      console.log(account);
+
+      const user = await getUser(account.address);
+      // console.log(user);
+      if (user) {
+        console.log("1");
+        // 1) user가 DB에 있는 경우
+        // 패스워드가 맞는지 확인
+        // 로그인시켜서 토큰 반환
+        login(account.address, password, res);
+      } else {
+        console.log("2");
+        // 2) user가 DB에 없는 경우
+        // 유저 생성 로직을 거치고 토큰 반환
+        const [address, privateKey, token] = await createUser(
+          password,
+          account.address,
+          pk
+        );
+        console.log(address, privateKey, token);
+
+        res.status(200).send({
+          address,
+          accessToken: token,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(400).send({
+        message: "server error",
+        errMsg: e,
+      });
+    }
+  },
   login: async (req, res) => {
     const { address, password } = req.body;
 
-    const user = await getUser(address);
-
-    if (!user) {
-      return res
-        .status(404)
-        .json({ message: "입력하신 Address는 존재하지 않습니다." });
-    }
-
-    const passwordIsValid =
-      CryptoJS.SHA256(password).toString() === user.password;
-
-    if (!passwordIsValid) {
-      return res.status(401).json({
-        accessToken: null,
-        message: "Address에 해당하는 Password가 일치하지 않습니다.",
-      });
-    }
-    const token = getToken(user);
-
-    res.status(200).json({
-      address: user.address,
-      accessToken: token,
-    });
+    login(address, password, res);
   },
   getUser: async (req, res) => {
     const address = req.address;
