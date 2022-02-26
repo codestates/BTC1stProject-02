@@ -15,9 +15,16 @@ const TransferAmount = () => {
     state.setActiveTab,
     state.setSendingAmount,
   ]);
+  const previousTab = useStore((state) => state.previousTab);
 
   return (
     <div>
+      <small
+        style={{ cursor: "pointer" }}
+        onClick={() => setActiveTab("TRANSFER_TO")}
+      >
+        뒤로
+      </small>
       <p>보내기</p>
       <div>
         <div

@@ -33,8 +33,8 @@ export const useStore = create((set) => ({
 
   web3: null,
   setWeb3: (web3) => set({ web3 }),
-  sendingAmount: null,
+  sendingAmount: "",
   setSendingAmount: (sendingAmount) => set({ sendingAmount }),
-  receiverAddress: null,
+  receiverAddress: "",
   setReceiverAddress: (receiverAddress) => set({ receiverAddress }),
 }));

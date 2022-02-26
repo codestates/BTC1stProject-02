@@ -12,8 +12,6 @@ const Asset = () => {
   const sendingAmount = useStore((state) => state.sendingAmount);
 
   const getUser = useCallback(async () => {
-    console.log("first");
-    console.log(user);
     if (user) {
       const {
         data: { user: resUser },
@@ -27,6 +25,7 @@ const Asset = () => {
   }, []);
 
   useEffect(() => {
+    console.log("first");
     getUser();
   }, [getUser, sendingAmount]);
 

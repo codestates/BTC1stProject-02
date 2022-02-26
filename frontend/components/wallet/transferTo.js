@@ -9,7 +9,10 @@ const TransferTo = () => {
     state.receiverAddress,
     state.setReceiverAddress,
   ]);
-  const setActiveTab = useStore((state) => state.setActiveTab);
+  const [setActiveTab, previousTab] = useStore((state) => [
+    state.setActiveTab,
+    state.previousTab,
+  ]);
 
   const handleClickNext = () => {
     const valid = web3.utils.isAddress(toAddress);
@@ -24,6 +27,12 @@ const TransferTo = () => {
 
   return (
     <div>
+      <small
+        style={{ cursor: "pointer" }}
+        onClick={() => setActiveTab("ASSET")}
+      >
+        뒤로
+      </small>
       <p>Send To</p>
 
       <div>

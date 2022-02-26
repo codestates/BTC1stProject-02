@@ -10,6 +10,7 @@ const CreateWalletPassword = () => {
   ]);
   const [password, setPassword] = useInputState("");
   const [password2, setPassword2] = useInputState("");
+  const previousTab = useStore((state) => state.previousTab);
 
   const createUser = async () => {
     const {
@@ -31,6 +32,12 @@ const CreateWalletPassword = () => {
 
   return (
     <div>
+      <small
+        style={{ cursor: "pointer" }}
+        onClick={() => setActiveTab(previousTab)}
+      >
+        뒤로
+      </small>
       <p>암호 생성</p>
       <Input
         style={{ marginBottom: "15px" }}

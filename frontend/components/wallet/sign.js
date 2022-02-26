@@ -49,6 +49,12 @@ const Sign = () => {
 
   return (
     <div>
+      <small
+        style={{ cursor: "pointer" }}
+        onClick={() => setActiveTab("TRANSFER_AMOUNT")}
+      >
+        뒤로
+      </small>
       <p>Sign 페이지</p>
       <div>
         <div style={{ marginBottom: "15px" }}>암호화폐를 보내시겠습니까?</div>

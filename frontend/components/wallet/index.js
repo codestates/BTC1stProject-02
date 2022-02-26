@@ -63,6 +63,7 @@ const Wallet = () => {
         }}
         title="BTC - 02 - AVALANCHE"
       >
+        {console.log(activeTab)}
         {user?.accessToken && <WalletHeader />}
         {walletTabs[activeTab]}
       </Modal>
