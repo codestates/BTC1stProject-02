@@ -1,3 +1,50 @@
+
+1. 패키지 다운
+- backend 디렉토리로 이동하여 `npm i` 입력
+- frontend 디렉토리로 이동하여 `npm i` 입력
+
+2. 데이터베이스 생성
+- mysql에서 btc_avax 데이터베이스 생성
+```sh
+$ mysql -u root -p
+(비밀번호 입력)
+
+$ create database btc_avax
+```
+
+3. backend/config/config.json 파일 내 development에 데이터베이스 패스워드를 입력합니다.
+```json
+{
+    "development": {
+        "username": "root",
+        "password": "비밀번호",
+        "database": "btc_avax",
+        ...
+    },
+  ...
+}
+```
+
+4. DB 테이블 생성
+backend 디렉토리로 이동하여 `npx sequelize-cli db:migrate` 를 입력
+
+5. 백엔드 실행 (4000 포트)
+`npx nodemon index.js`
+
+6. 프론트엔드 실행 (3000 포트)
+frontend 디렉토리로 이동하여 `npm run dev`
+
+7. 데몬 실행
+backend 디렉토리로 이동하여 `node daemon.js` 입력
+중지하지 않는 한 계속 실행됩니다.
+
+지갑하고 익스플로러 보시려면 localhost:3000 으로 접속하시면 됩니다.
+지갑은 생성하고 나면 localStorage 에 저장됩니다. 
+저장된 지갑을 삭제하고 다시 생성하고 싶으시면 브라우저에서 개발자도구 여시고 localstorage 지워주시고 다시 생성하시면 됩니다.
+
+
+
+
 {
   blockHash: '0x99013db6a6b9ec3728725f3323b9b78e6013002acadf4c18d753246e4d68618a',
   blockNumber: 6594112,

@@ -7,8 +7,19 @@ const Login = () => {
     <div>
       <p>로그인 페이지</p>
       <div>
-        <Input variant="default" placeholder="Password" />
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <Input
+          style={{ marginBottom: "15px" }}
+          variant="default"
+          placeholder="Password"
+          type="password"
+        />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "15px",
+          }}
+        >
           <Button>잠금해제</Button>
         </div>
         <small
