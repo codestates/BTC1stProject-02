@@ -3,6 +3,7 @@ import { useInputState } from "@mantine/hooks";
 import axios from "axios";
 import { getCurrentUser } from "../../utils/auth";
 import { useStore } from "../../utils/store";
+import { WalletTitle } from "./style";
 
 const Login = () => {
   const setActiveTab = useStore((state) => state.setActiveTab);
@@ -26,7 +27,7 @@ const Login = () => {
 
   return (
     <div>
-      <p>로그인 페이지</p>
+      <WalletTitle>로그인 페이지</WalletTitle>
       <div>
         <Input
           style={{ marginBottom: "15px" }}

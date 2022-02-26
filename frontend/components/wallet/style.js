@@ -7,11 +7,20 @@ export const WalletContainer = styled.div`
   flex-direction: column;
 `;
 
-export const WalletTitle = styled.p``;
+export const WalletTitle = styled.div`
+  margin-bottom: 15px;
+`;
 
 export const WalletContent = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+`;
+
+export const BackButtonContainer = styled.div`
+  display: flex;
+  alignitems: center;
+  cursor: pointer;
+  margin: 30px 0;
 `;

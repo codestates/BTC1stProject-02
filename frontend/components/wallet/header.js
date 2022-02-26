@@ -1,25 +1,35 @@
 import styled from "@emotion/styled";
-import { Tooltip } from "@mantine/core";
+import { Button, Select, Tooltip } from "@mantine/core";
+import { useState } from "react";
 import { useStore } from "../../utils/store";
 
 const Container = styled.div`
   display: flex;
   justify-content: space-around;
+  margin-bottom: 20px;
 `;
 
-const LockButotn = styled.div`
-  cursor: pointer;
-`;
+// const LockButotn = styled.div`
+//   cursor: pointer;
+//   padding: 5px 8px;
+//   border: 1px solid grey;
+//   border-radius: 18px;
+//   margin-right: 10px;
+// `;
 
-const RemoveWallet = styled.div`
-  cursor: pointer;
-`;
+// const RemoveWallet = styled.div`
+//   cursor: pointer;
+//   padding: 5px 8px;
+//   border: 1px solid grey;
+//   border-radius: 18px;
+// `;
 
 const WalletHeader = () => {
   const [setUser, setActiveTab] = useStore((state) => [
     state.setUser,
     state.setActiveTab,
   ]);
+  const [value, setValue] = useState("testnet");
 
   const handleClickLock = () => {
     let user = localStorage.getItem("user");
@@ -33,21 +43,37 @@ const WalletHeader = () => {
 
   return (
     <Container>
-      <div style={{ flex: "2" }}>네트워크</div>
+      <div style={{ flex: "1.3", paddingRight: "15px" }}>
+        <Select
+          value={value}
+          data={[
+            { value: "testnet", label: "Test Network" },
+            { value: "localnet", label: "Local Network" },
+          ]}
+          onChange={setValue}
+        />
+      </div>
       <div
-        style={{ flex: "1", display: "flex", justifyContent: "space-between" }}
+        style={{
+          flex: "1",
+          display: "flex",
+          justifyContent: "space-between",
+        }}
       >
         <Tooltip
           label="지갑을 잠근 후 비밀번호를 이용해 다시 잠금해제 할 수 있습니다."
           withArrow
         >
-          <LockButotn onClick={handleClickLock}>잠금</LockButotn>
+          {/* <LockButotn onClick={handleClickLock}>잠금</LockButotn> */}
+          <Button onClick={handleClickLock} variant="outline">
+            잠금
+          </Button>
         </Tooltip>
         <Tooltip
           label="지갑을 제거합니다. 제거 후에도 개인키로 다시 지갑을 불러올 수 있습니다."
           withArrow
         >
-          <RemoveWallet
+          {/* <RemoveWallet
             onClick={() => {
               localStorage.removeItem("user");
               setUser(null);
@@ -55,7 +81,17 @@ const WalletHeader = () => {
             }}
           >
             지갑 제거
-          </RemoveWallet>
+          </RemoveWallet> */}
+          <Button
+            onClick={() => {
+              localStorage.removeItem("user");
+              setUser(null);
+              setActiveTab("CREATE_WALLET");
+            }}
+            variant="outline"
+          >
+            지갑 제거
+          </Button>
         </Tooltip>
       </div>
     </Container>

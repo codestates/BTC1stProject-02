@@ -1,6 +1,7 @@
 import { Button } from "@mantine/core";
 import { useCallback, useEffect } from "react";
 import { useStore } from "../../utils/store";
+import { WalletTitle } from "./style";
 
 const Asset = () => {
   const [user, updateUser, setActiveTab] = useStore((state) => [
@@ -31,7 +32,6 @@ const Asset = () => {
 
   return (
     <div>
-      <p>ASSET 페이지</p>
       <div
         style={{
           display: "flex",

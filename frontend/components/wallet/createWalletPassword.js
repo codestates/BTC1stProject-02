@@ -2,6 +2,7 @@ import { Button, Input } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import axios from "axios";
 import { useStore } from "../../utils/store";
+import { WalletTitle } from "./style";
 
 const CreateWalletPassword = () => {
   const [setActiveTab, setUser] = useStore((state) => [
@@ -38,7 +39,7 @@ const CreateWalletPassword = () => {
       >
         뒤로
       </small>
-      <p>암호 생성</p>
+      <WalletTitle>암호 생성</WalletTitle>
       <Input
         style={{ marginBottom: "15px" }}
         variant="default"

@@ -1,8 +1,8 @@
 import { Button, Input } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import axios from "axios";
-import { getCurrentUser } from "../../utils/auth";
 import { useStore } from "../../utils/store";
+import { WalletTitle } from "./style";
 
 const Restore = () => {
   const [setActiveTab, previousTab] = useStore((state) => [
@@ -45,7 +45,7 @@ const Restore = () => {
       >
         뒤로
       </small>
-      <p>비밀키로 계정 복구</p>
+      <WalletTitle>비밀키로 계정 복구</WalletTitle>
       <div>
         <Input
           style={{ marginBottom: "15px" }}

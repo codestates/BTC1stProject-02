@@ -1,6 +1,8 @@
 import { Button, Input } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { useStore } from "../../utils/store";
+import BackButton from "../backButton";
+import { WalletTitle } from "./style";
 
 const TransferTo = () => {
   const [toAddress, setToAddress] = useInputState("");
@@ -27,13 +29,9 @@ const TransferTo = () => {
 
   return (
     <div>
-      <small
-        style={{ cursor: "pointer" }}
-        onClick={() => setActiveTab("ASSET")}
-      >
-        뒤로
-      </small>
-      <p>Send To</p>
+      <BackButton nextTab="ASSET" />
+
+      <WalletTitle>Send To</WalletTitle>
 
       <div>
         <Input

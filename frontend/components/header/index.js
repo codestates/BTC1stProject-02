@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { ActionIcon } from "@mantine/core";
 import { AiOutlineWallet } from "react-icons/ai";
+import theme from "../../styles/theme";
 import { useStore } from "../../utils/store";
 
 const Container = styled.div`
@@ -32,6 +33,17 @@ const Title = styled.h1`
   font-weight: bold;
 `;
 
+const CActionIcon = styled(ActionIcon)`
+  width: 40px;
+  height: 40px;
+  background-color: ${(props) => props.theme.colors.grey};
+  color: white;
+
+  &: hover {
+    background-color: ${(props) => props.theme.colors.lightGrey};
+  }
+`;
+
 const compressAddress = (address) => {
   return `${address?.slice(0, 4)}....${address?.slice(-4)}`;
 };
@@ -46,8 +58,7 @@ const Header = () => {
         {user?.address && user?.accessToken && (
           <Badge>{compressAddress(user.address)}</Badge>
         )}
-        <ActionIcon
-          style={{ width: 40, height: 40 }}
+        <CActionIcon
           onClick={() => {
             setOpened(true);
           }}
@@ -56,7 +67,7 @@ const Header = () => {
             onClick={() => setOpened(true)}
             style={{ width: 40, height: 40 }}
           />
-        </ActionIcon>
+        </CActionIcon>
       </div>
     </Container>
   );

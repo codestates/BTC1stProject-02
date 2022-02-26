@@ -2,6 +2,8 @@ import styled from "@emotion/styled";
 import { Button, Input } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { useStore } from "../../utils/store";
+import BackButton from "../backButton";
+import { WalletTitle } from "./style";
 
 const AssetContainer = styled.div`
   border: 1px solid grey;
@@ -19,13 +21,8 @@ const TransferAmount = () => {
 
   return (
     <div>
-      <small
-        style={{ cursor: "pointer" }}
-        onClick={() => setActiveTab("TRANSFER_TO")}
-      >
-        뒤로
-      </small>
-      <p>보내기</p>
+      <BackButton nextTab="TRANSFER_TO" />
+      <WalletTitle>보내기</WalletTitle>
       <div>
         <div
           style={{
