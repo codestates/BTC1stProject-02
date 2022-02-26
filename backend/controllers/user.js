@@ -17,22 +17,61 @@ const getToken = (user) => {
   return jwt.sign({ address: user.address }, process.env.TOKEN_SECRET);
 };
 
+const getUser = async (address) => {
+  const user = await User.findOne({
+    where: {
+      address,
+    },
+  });
+
+  return user;
+};
+
+const getPk = async (address) => {
+  const user = await getUser(address);
+
+  const bytes = CryptoJS.AES.decrypt(user.pk, user.salt);
+  const decryptedPk = bytes.toString(CryptoJS.enc.Utf8);
+
+  return decryptedPk;
+};
+
+const sendTransaction = async (fromAddress, toAddress, pk, amount, web3) => {
+  // console.log(fromAddress, toAddress, pk, amount);
+
+  let tx = {
+    from: fromAddress,
+    to: toAddress,
+    value: web3.utils.toWei(amount, "ether"),
+    gas: 21000,
+  };
+  // tx["gas"] = await web3.eth.estimateGas(tx);
+  // console.log(tx);
+
+  await web3.eth.accounts.privateKeyToAccount(pk);
+
+  const signedTx = await web3.eth.accounts.signTransaction(tx, pk);
+  // console.log(signedTx);
+
+  // const signedTx = await ownerAccount.signTransaction(tx);
+  return await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+  // .on("receipt", console.log);
+};
+
 module.exports = {
   createUser: async (req, res) => {
     try {
       const { password } = req.body;
-      console.log(password);
-      console.log(process.env.TOKEN_SECRET);
 
       const { address, privateKey } = await web3.eth.accounts.create();
       const salt = makeSalt(18);
 
       // Encrypt
-      var encryptedPk = CryptoJS.AES.encrypt(privateKey, salt).toString();
+      const encryptedPk = CryptoJS.AES.encrypt(privateKey, salt).toString();
 
       // Decrypt
-      // var bytes = CryptoJS.AES.decrypt(encryptedPk, salt);
-      // var originalText = bytes.toString(CryptoJS.enc.Utf8);
+      // const bytes = CryptoJS.AES.decrypt(encryptedPk, salt);
+      // const originalText = bytes.toString(CryptoJS.enc.Utf8);
 
       const user = await User.create({
         address,
@@ -57,11 +96,7 @@ module.exports = {
     const { address, password } = req.body;
     console.log(address, password);
 
-    const user = await User.findOne({
-      where: {
-        address,
-      },
-    });
+    const user = await getUser(address);
 
     if (!user) {
       return res
@@ -92,13 +127,9 @@ module.exports = {
       await web3.eth.getBalance(address),
       "ether"
     );
-    console.log(resBalance);
+    // console.log(resBalance);
 
-    const user = await User.findOne({
-      where: {
-        address,
-      },
-    });
+    const user = await getUser(address);
 
     if (resBalance !== user.balance) {
       user.balance = resBalance;
@@ -130,6 +161,38 @@ module.exports = {
           req.address = decoded.address;
           next();
         }
+      });
+    }
+  },
+  transfer: async (req, res) => {
+    try {
+      const { toAddress, amount } = req.body;
+      const fromAddress = req.address;
+      // console.log(toAddress, fromAddress, amount);
+
+      const pk = await getPk(fromAddress);
+      const result = await sendTransaction(
+        fromAddress,
+        toAddress,
+        pk,
+        amount,
+        web3
+      );
+
+      if (result?.status !== null) {
+        if (result.status) {
+          console.log("거래 성공");
+          res.status(200).json({ message: "success" });
+        } else {
+          console.log("거래 실패");
+          res.status(400).json({ message: "fail" });
+        }
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(404).send({
+        message: "server error",
+        errMsg: e,
       });
     }
   },
