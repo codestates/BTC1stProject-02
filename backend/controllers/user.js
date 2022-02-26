@@ -94,7 +94,6 @@ module.exports = {
   },
   login: async (req, res) => {
     const { address, password } = req.body;
-    console.log(address, password);
 
     const user = await getUser(address);
 
@@ -103,10 +102,9 @@ module.exports = {
         .status(404)
         .json({ message: "입력하신 Address는 존재하지 않습니다." });
     }
-    console.log(user);
 
-    const passwordIsValid = CryptoJS.SHA256(password).toString() === password;
-    console.log(passwordIsValid);
+    const passwordIsValid =
+      CryptoJS.SHA256(password).toString() === user.password;
 
     if (!passwordIsValid) {
       return res.status(401).json({
