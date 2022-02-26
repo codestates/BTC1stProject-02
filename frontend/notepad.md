@@ -84,10 +84,8 @@ backend 디렉토리로 이동하여 `node daemon.js` 입력
 
 
 
-address: 0x702AAc7C54D8dB46132735aeF409bD88226a5860
-pk: 0x24ad8365a54b88497e59ff835ff84e54a418db9df804e9c7a7163ff2423c9cc8
-    0x24ad8365a54b88497e59ff835ff84e54a418db9df804e9c7a7163ff2423c9cc8
-    24ad8365a54b88497e59ff835ff84e54a418db9df804e9c7a7163ff2423c9cc8
+address: 0x45f77Fa0E7C3B4417479AeB0e43Bd4C102a4DF9B
+pk: 0x2ddaea20e5f6db78af503a23662c32141931aea2513a995dd887b7d6c0cf0559
 ## 잠금
 잠금 버튼을 누르면 로컬스토리지 accessToken 제거
 password로 인증하도록 설정
