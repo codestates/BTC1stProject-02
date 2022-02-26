@@ -32,6 +32,7 @@ export const getCurrentUser = () => {
 export const authHeader = () => {
   const user = getCurrentUser();
 
+  console.log(user);
   if (user && user.accessToken) {
     return { "x-access-token": user.accessToken };
   } else {
