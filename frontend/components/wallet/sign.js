@@ -1,8 +1,51 @@
 import { Button } from "@mantine/core";
 import { useStore } from "../../utils/store";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Sign = () => {
-  const setOpened = useStore((state) => state.setOpened);
+  const [setOpened, Axios] = useStore((state) => [
+    state.setOpened,
+    state.Axios,
+  ]);
+  const [sendingAmount, receiverAddress] = useStore((state) => [
+    state.sendingAmount,
+    state.receiverAddress,
+  ]);
+  const [setSendingAmount, setReceiverAddress] = useStore((state) => [
+    state.setSendingAmount,
+    state.setReceiverAddress,
+  ]);
+
+  const setActiveTab = useStore((state) => state.setActiveTab);
+
+  const transfer = async () => {
+    const response = await Axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/user/transfer`,
+      {
+        toAddress: receiverAddress,
+        amount: sendingAmount,
+      }
+    );
+
+    return response;
+  };
+
+  const handleClickSign = () => {
+    const callTransfer = transfer();
+    toast
+      .promise(callTransfer, {
+        pending: "트랜잭션 처리 중 🙏",
+        success: "거래 성공 👌",
+        error: "거래 실패 🤯",
+      })
+      .then(() => {
+        setSendingAmount(0);
+        setReceiverAddress("");
+      });
+
+    setActiveTab("ASSET");
+  };
 
   return (
     <div>
@@ -13,7 +56,7 @@ const Sign = () => {
           <Button onClick={() => setOpened(false)} color="gray">
             거부
           </Button>
-          <Button>확인</Button>
+          <Button onClick={() => handleClickSign()}>확인</Button>
         </div>
       </div>
     </div>

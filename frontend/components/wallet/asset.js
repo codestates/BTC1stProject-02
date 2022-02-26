@@ -9,6 +9,7 @@ const Asset = () => {
     state.setActiveTab,
   ]);
   const Axios = useStore((state) => state.Axios);
+  const sendingAmount = useStore((state) => state.sendingAmount);
 
   const getUser = useCallback(async () => {
     if (user) {
@@ -25,7 +26,7 @@ const Asset = () => {
 
   useEffect(() => {
     getUser();
-  }, [getUser]);
+  }, [getUser, sendingAmount]);
 
   return (
     <div>

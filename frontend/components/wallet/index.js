@@ -11,6 +11,7 @@ import Restore from "./restore";
 import Sign from "./sign";
 import TransferAmount from "./transferAmount";
 import TransferTo from "./transferTo";
+import { ToastContainer } from "react-toastify";
 
 const Wallet = () => {
   const [opened, setOpened] = useStore((state) => [
@@ -45,16 +46,24 @@ const Wallet = () => {
   }, [opened, setActiveTab]);
 
   return (
-    <Modal
-      opened={opened}
-      onClose={() => {
-        setOpened(false);
-        setActiveTab("CREATE_WALLET");
-      }}
-      title="BTC - 02 - AVALANCHE"
-    >
-      {walletTabs[activeTab]}
-    </Modal>
+    <>
+      <Modal
+        opened={opened}
+        onClose={() => {
+          setOpened(false);
+          setActiveTab("CREATE_WALLET");
+        }}
+        title="BTC - 02 - AVALANCHE"
+      >
+        {walletTabs[activeTab]}
+      </Modal>
+      <ToastContainer
+        position="top-right"
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </>
   );
 };
 
