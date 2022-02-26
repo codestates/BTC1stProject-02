@@ -39,8 +39,7 @@ const Asset = () => {
           alignItems: "center",
         }}
       >
-        <div style={{ marginBottom: "15px" }}>
-          <span>잔액: </span>
+        <div style={{ marginBottom: "15px", fontSize: "40px" }}>
           <span>{user?.balance} AVAX</span>
         </div>
         <Button

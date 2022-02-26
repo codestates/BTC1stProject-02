@@ -8,6 +8,8 @@ export const WalletContainer = styled.div`
 `;
 
 export const WalletTitle = styled.div`
+  font-size: 20px;
+  text-align: center;
   margin-bottom: 15px;
 `;
 
@@ -20,7 +22,7 @@ export const WalletContent = styled.div`
 
 export const BackButtonContainer = styled.div`
   display: flex;
-  alignitems: center;
+  align-items: center;
   cursor: pointer;
-  margin: 30px 0;
+  margin: 20px 0;
 `;

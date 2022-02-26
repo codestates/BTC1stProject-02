@@ -55,7 +55,15 @@ const Sign = () => {
 
       <WalletTitle>Sign 페이지</WalletTitle>
       <div>
-        <div style={{ marginBottom: "15px" }}>암호화폐를 보내시겠습니까?</div>
+        <div
+          style={{
+            marginBottom: "30px",
+            textAlign: "center",
+            fontSize: "18px",
+          }}
+        >
+          암호화폐를 보내시겠습니까?
+        </div>
         <div style={{ display: "flex", justifyContent: "space-around" }}>
           <Button onClick={() => setOpened(false)} color="gray">
             거부
