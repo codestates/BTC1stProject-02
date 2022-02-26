@@ -4,7 +4,7 @@ import { AiOutlineWallet } from "react-icons/ai";
 import { useStore } from "../../utils/store";
 
 const Container = styled.div`
-  height: 50px;
+  height: 70px;
   padding: 10px 20px;
 
   display: flex;
@@ -25,6 +25,13 @@ const Badge = styled.div`
   background-color: rgba(231, 245, 255, 1);
 `;
 
+const Title = styled.h1`
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+  font-weight: bold;
+`;
+
 const compressAddress = (address) => {
   return `${address?.slice(0, 4)}....${address?.slice(-4)}`;
 };
@@ -34,19 +41,20 @@ const Header = () => {
 
   return (
     <Container>
-      <div>BTC - 02 - AVALANCHE</div>
+      <Title>BTC - 02 - AVALANCHE</Title>
       <div style={{ display: "flex", alignItems: "center" }}>
         {user?.address && user?.accessToken && (
           <Badge>{compressAddress(user.address)}</Badge>
         )}
         <ActionIcon
+          style={{ width: 40, height: 40 }}
           onClick={() => {
             setOpened(true);
           }}
         >
           <AiOutlineWallet
             onClick={() => setOpened(true)}
-            style={{ width: 32, height: 32 }}
+            style={{ width: 40, height: 40 }}
           />
         </ActionIcon>
       </div>

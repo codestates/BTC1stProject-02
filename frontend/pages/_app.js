@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { useStore } from "../utils/store";
 import Web3 from "web3";
+import { ThemeProvider } from "@emotion/react";
+import theme from "../styles/theme";
 
 export default function App(props) {
   const { Component, pageProps } = props;
@@ -38,12 +40,23 @@ export default function App(props) {
           colorScheme: "light",
         }}
       >
-        <Layout>
-          <QueryClientProvider client={queryClient}>
-            <Component {...pageProps} />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </QueryClientProvider>
-        </Layout>
+        <ThemeProvider theme={theme}>
+          <Layout>
+            <QueryClientProvider client={queryClient}>
+              <Component {...pageProps} />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
+          </Layout>
+        </ThemeProvider>
+
+        <style jsx global>{`
+          /* Other global styles such as 'html, body' etc... */
+
+          body {
+            background-color: black !important;
+            color: white !important;
+          }
+        `}</style>
       </MantineProvider>
     </>
   );
