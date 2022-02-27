@@ -1,4 +1,4 @@
-const { Tx } = require("../models");
+const { Tx, Sequelize, sequelize } = require("../models");
 
 module.exports = {
   getTransactions: async (req, res, next) => {
@@ -64,9 +64,10 @@ module.exports = {
 
   getMyFromTransactions: async (req, res) => {
     try {
-      let tx = await Tx.findAll({
+      let txs = await Tx.findAll({
         limit: 5,
         order: [["id", "DESC"]],
+        attributes: { exclude: ["id"] },
         where: {
           // network: req.cookies["network"],
           network: req.network,
@@ -75,7 +76,32 @@ module.exports = {
       });
 
       res.status(200).send({
-        tx,
+        txs,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(404).send({
+        message: "server error",
+        errMsg: err,
+      });
+    }
+  },
+  getLatestReceivers: async (req, res) => {
+    try {
+      let txs = await Tx.findAll({
+        attributes: ["to"],
+        group: ["to"],
+        where: {
+          // network: req.cookies["network"],
+          network: req.network,
+          from: req.address,
+        },
+      });
+
+      const latestReceivers = txs.reverse().map((tx) => tx.to);
+
+      res.status(200).send({
+        latestReceivers,
       });
     } catch (err) {
       console.log(err);
