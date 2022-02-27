@@ -77,7 +77,7 @@ const Header = () => {
             fill="#ffffff"
           ></path>
         </svg>
-        <Title>AVALANCHE</Title>
+        <Title>BTC02-AVALANCHE</Title>
       </div>
       <RightHeader style={{ display: "flex", alignItems: "center" }}>
         <NetworkSelector />
