@@ -5,17 +5,18 @@ const {
   getTxs,
   storeTx,
   getNewTxs,
-} = require("./utils/daemon");
+} = require("./utils/daemon-local");
 const fs = require("fs");
 const path = require("path");
 const basePath = __dirname;
 const db = require("./models");
 
 // 시작 시 DB 테이블(Txes, Users) 지운 다음, 다시 생성
-const init = async () => {
-  await db.Tx.sync({ force: true });
-};
-init();
+// 로컬 네트워크 연결 시에는 생략
+// const init = async () => {
+//   await db.Tx.sync({ force: true });
+// };
+// init();
 
 let taskRunning = false;
 let FIRST = true;
@@ -33,7 +34,7 @@ const task = cron.schedule(
 
       let startBlockNumber =
         Number(
-          fs.readFileSync(path.join(basePath, "./utils/blockNumber"), {
+          fs.readFileSync(path.join(basePath, "./utils/blockNumber-local"), {
             encoding: "utf-8",
           })
         ) + 1;
@@ -42,9 +43,10 @@ const task = cron.schedule(
 
       // TODO: (삭제 예정) 시작 블록 넘버가 현재 블록 넘버보다 3 이상 크면
       //       현재 블록 넘버 - 3 부터 시작
+      //       로컬 네트워크는 0번 블록부터 시작
 
       if (FIRST) {
-        startBlockNumber = currentBlockNumber - 3;
+        startBlockNumber = 0;
         FIRST = false;
       }
 

@@ -65,6 +65,7 @@ const storeTx = async (tx) => {
   await Tx.findOrCreate({
     where: { tx_hash: tx.hash },
     defaults: {
+      network: "testnet",
       tx_hash: tx.hash,
       from: tx.from,
       to: tx.to,
