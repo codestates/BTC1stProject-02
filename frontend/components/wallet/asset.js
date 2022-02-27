@@ -1,7 +1,6 @@
 import { Button } from "@mantine/core";
 import { useCallback, useEffect } from "react";
 import { useStore } from "../../utils/store";
-import { WalletTitle } from "./style";
 
 const Asset = () => {
   const [user, updateUser, setActiveTab] = useStore((state) => [
@@ -10,14 +9,17 @@ const Asset = () => {
     state.setActiveTab,
   ]);
   const Axios = useStore((state) => state.Axios);
-  const sendingAmount = useStore((state) => state.sendingAmount);
+  const [network, sendingAmount] = useStore((state) => [
+    state.network,
+    state.sendingAmount,
+  ]);
 
   const getUser = useCallback(async () => {
     if (user) {
       const {
         data: { user: resUser },
       } = await Axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/user`, {
-        address: user.address,
+        withCredentials: true,
       });
       updateUser("balance", resUser.balance);
     } else {
@@ -26,9 +28,8 @@ const Asset = () => {
   }, []);
 
   useEffect(() => {
-    console.log("first");
     getUser();
-  }, [getUser, sendingAmount]);
+  }, [getUser, sendingAmount, network]);
 
   return (
     <div>

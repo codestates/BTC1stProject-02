@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
-import { Button, Select, Tooltip } from "@mantine/core";
-import { useState } from "react";
+import { Button, Tooltip } from "@mantine/core";
 import { useStore } from "../../utils/store";
 import NetworkSelector from "../networkSelector";
 
