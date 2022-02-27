@@ -1,6 +1,7 @@
 import { Button } from "@mantine/core";
 import { useCallback, useEffect } from "react";
 import { useStore } from "../../utils/store";
+import { WalletTitle } from "./style";
 
 const Asset = () => {
   const [user, updateUser, setActiveTab] = useStore((state) => [
@@ -12,8 +13,6 @@ const Asset = () => {
   const sendingAmount = useStore((state) => state.sendingAmount);
 
   const getUser = useCallback(async () => {
-    console.log("first");
-    console.log(user);
     if (user) {
       const {
         data: { user: resUser },
@@ -27,12 +26,12 @@ const Asset = () => {
   }, []);
 
   useEffect(() => {
+    console.log("first");
     getUser();
   }, [getUser, sendingAmount]);
 
   return (
     <div>
-      <p>ASSET 페이지</p>
       <div
         style={{
           display: "flex",
@@ -40,8 +39,7 @@ const Asset = () => {
           alignItems: "center",
         }}
       >
-        <div style={{ marginBottom: "15px" }}>
-          <span>잔액: </span>
+        <div style={{ marginBottom: "15px", fontSize: "40px" }}>
           <span>{user?.balance} AVAX</span>
         </div>
         <Button

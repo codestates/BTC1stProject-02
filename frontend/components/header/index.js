@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
 import { ActionIcon } from "@mantine/core";
 import { AiOutlineWallet } from "react-icons/ai";
+import theme from "../../styles/theme";
 import { useStore } from "../../utils/store";
 
 const Container = styled.div`
-  height: 50px;
+  height: 70px;
   padding: 10px 20px;
 
   display: flex;
@@ -25,6 +26,24 @@ const Badge = styled.div`
   background-color: rgba(231, 245, 255, 1);
 `;
 
+const Title = styled.h1`
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+  font-weight: bold;
+`;
+
+const CActionIcon = styled(ActionIcon)`
+  width: 40px;
+  height: 40px;
+  background-color: ${(props) => props.theme.colors.grey};
+  color: white;
+
+  &: hover {
+    background-color: ${(props) => props.theme.colors.lightGrey};
+  }
+`;
+
 const compressAddress = (address) => {
   return `${address?.slice(0, 4)}....${address?.slice(-4)}`;
 };
@@ -34,21 +53,21 @@ const Header = () => {
 
   return (
     <Container>
-      <div>BTC - 02 - AVALANCHE</div>
+      <Title>BTC - 02 - AVALANCHE</Title>
       <div style={{ display: "flex", alignItems: "center" }}>
         {user?.address && user?.accessToken && (
           <Badge>{compressAddress(user.address)}</Badge>
         )}
-        <ActionIcon
+        <CActionIcon
           onClick={() => {
             setOpened(true);
           }}
         >
           <AiOutlineWallet
             onClick={() => setOpened(true)}
-            style={{ width: 32, height: 32 }}
+            style={{ width: 40, height: 40 }}
           />
-        </ActionIcon>
+        </CActionIcon>
       </div>
     </Container>
   );

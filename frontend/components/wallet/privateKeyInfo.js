@@ -1,6 +1,7 @@
 import { Alert, Button, Text } from "@mantine/core";
 import { FiAlertCircle } from "react-icons/fi";
 import { useStore } from "../../utils/store";
+import { WalletTitle } from "./style";
 
 const PrivateKeyInfo = () => {
   const [user, updateUser] = useStore((state) => [
@@ -11,7 +12,7 @@ const PrivateKeyInfo = () => {
 
   return (
     <div>
-      <p>PK 정보</p>
+      <WalletTitle>PK 정보</WalletTitle>
 
       <div>
         <Text style={{ marginBottom: "15px" }}>{user.pk}</Text>

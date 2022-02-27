@@ -7,10 +7,12 @@ import Header from "../header";
 import Wallet from "../wallet";
 
 const Content = styled.div`
-  height: calc(100vh - 50px);
+  min-height: calc(100vh - 70px);
 
   padding: 10px 20px;
 `;
+
+const Container = styled.div``;
 
 const Layout = ({ children }) => {
   const setUser = useStore((state) => state.setUser);
@@ -21,13 +23,13 @@ const Layout = ({ children }) => {
   }, []);
 
   return (
-    <div>
+    <Container>
       <Header />
       <Content>
         <Text>{children}</Text>
         <Wallet />
       </Content>
-    </div>
+    </Container>
   );
 };
 

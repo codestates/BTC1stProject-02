@@ -13,6 +13,14 @@ import TransferAmount from "./transferAmount";
 import TransferTo from "./transferTo";
 import { ToastContainer } from "react-toastify";
 import WalletHeader from "./header";
+import styled from "@emotion/styled";
+
+const CModal = styled(Modal)`
+  && .mantine-Modal-title {
+    font-weight: bold;
+    font-size: 18px;
+  }
+`;
 
 const Wallet = () => {
   const [opened, setOpened] = useStore((state) => [
@@ -55,7 +63,7 @@ const Wallet = () => {
 
   return (
     <>
-      <Modal
+      <CModal
         opened={opened}
         onClose={() => {
           setOpened(false);
@@ -63,9 +71,10 @@ const Wallet = () => {
         }}
         title="BTC - 02 - AVALANCHE"
       >
+        {console.log(activeTab)}
         {user?.accessToken && <WalletHeader />}
         {walletTabs[activeTab]}
-      </Modal>
+      </CModal>
       <ToastContainer
         position="top-right"
         pauseOnFocusLoss

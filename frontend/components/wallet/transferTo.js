@@ -1,6 +1,8 @@
 import { Button, Input } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { useStore } from "../../utils/store";
+import BackButton from "../backButton";
+import { WalletTitle } from "./style";
 
 const TransferTo = () => {
   const [toAddress, setToAddress] = useInputState("");
@@ -9,7 +11,10 @@ const TransferTo = () => {
     state.receiverAddress,
     state.setReceiverAddress,
   ]);
-  const setActiveTab = useStore((state) => state.setActiveTab);
+  const [setActiveTab, previousTab] = useStore((state) => [
+    state.setActiveTab,
+    state.previousTab,
+  ]);
 
   const handleClickNext = () => {
     const valid = web3.utils.isAddress(toAddress);
@@ -24,7 +29,9 @@ const TransferTo = () => {
 
   return (
     <div>
-      <p>Send To</p>
+      <BackButton nextTab="ASSET" />
+
+      <WalletTitle>Send To</WalletTitle>
 
       <div>
         <Input

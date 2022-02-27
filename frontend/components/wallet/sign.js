@@ -2,6 +2,8 @@ import { Button } from "@mantine/core";
 import { useStore } from "../../utils/store";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { WalletTitle } from "./style";
+import BackButton from "../backButton";
 
 const Sign = () => {
   const [setOpened, Axios] = useStore((state) => [
@@ -49,9 +51,19 @@ const Sign = () => {
 
   return (
     <div>
-      <p>Sign 페이지</p>
+      <BackButton nextTab="TRANSFER_AMOUNT" />
+
+      <WalletTitle>Sign 페이지</WalletTitle>
       <div>
-        <div style={{ marginBottom: "15px" }}>암호화폐를 보내시겠습니까?</div>
+        <div
+          style={{
+            marginBottom: "30px",
+            textAlign: "center",
+            fontSize: "18px",
+          }}
+        >
+          암호화폐를 보내시겠습니까?
+        </div>
         <div style={{ display: "flex", justifyContent: "space-around" }}>
           <Button onClick={() => setOpened(false)} color="gray">
             거부
