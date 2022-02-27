@@ -1,6 +1,11 @@
 const router = require("express").Router();
-const { getTransactions } = require("../controllers/transaction.js");
+const {
+  getTransactions,
+  setNetwork,
+  getNetwork,
+} = require("../controllers/transaction.js");
 
-router.get("/", getTransactions);
+router.get("/", getNetwork, getTransactions);
+router.post("/network", setNetwork);
 
 module.exports = router;

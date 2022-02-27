@@ -1,15 +1,12 @@
 const cron = require("node-cron");
 const {
   getCurrentBlockNumber,
-  getTxIDs,
-  getTxs,
   storeTx,
   getNewTxs,
 } = require("./utils/daemon-local");
 const fs = require("fs");
 const path = require("path");
 const basePath = __dirname;
-const db = require("./models");
 
 // 시작 시 DB 테이블(Txes, Users) 지운 다음, 다시 생성
 // 로컬 네트워크 연결 시에는 생략

@@ -2,7 +2,7 @@ const Web3 = require("web3");
 const NODE_URL = "http://127.0.0.1:9650/ext/bc/C/rpc";
 const provider = new Web3.providers.HttpProvider(NODE_URL);
 const web3 = new Web3(provider);
-const { Tx, User } = require("../models");
+const { Tx } = require("../models");
 
 const getCurrentBlockNumber = async () => await web3.eth.getBlockNumber();
 

@@ -3,7 +3,7 @@ const NODE_URL =
   "https://speedy-nodes-nyc.moralis.io/418f8e6973f3c5924015ef94/avalanche/testnet";
 const provider = new Web3.providers.HttpProvider(NODE_URL);
 const web3 = new Web3(provider);
-const { Tx, User } = require("../models");
+const { Tx } = require("../models");
 
 const getCurrentBlockNumber = async () => await web3.eth.getBlockNumber();
 
