@@ -93,13 +93,10 @@ const WalletAddress = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <CopyAddress>
+      <CopyAddress onClick={() => doCopy(user.address)}>
         <span style={{ fontSize: "20px" }}>지갑 주소</span>
         <div style={{ color: "grey" }}>
-          <span
-            style={{ marginRight: "10px", color: "grey" }}
-            onClick={() => doCopy(user.address)}
-          >
+          <span style={{ marginRight: "10px", color: "grey" }}>
             {compressAddress(user.address)}
           </span>
           <FaRegCopy style={{ transform: "translateY(1.5px)" }} />

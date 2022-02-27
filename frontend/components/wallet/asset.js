@@ -1,4 +1,4 @@
-import { Button } from "@mantine/core";
+import { Button, ScrollArea } from "@mantine/core";
 import { useQuery } from "react-query";
 import { useStore } from "../../utils/store";
 import TransactionHistory from "./transactionHistory";
@@ -17,8 +17,10 @@ const Asset = () => {
       await Axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/user`, {
         withCredentials: true,
       }).then(({ data: { user: resUser } }) => {
-        // console.log(resUser);
-        setUser(resUser);
+        console.log(resUser);
+        if (resUser.balance !== user.balance) {
+          setUser(resUser);
+        }
         return resUser;
       });
     },
@@ -75,7 +77,9 @@ const Asset = () => {
           >
             활동 내역
           </div>
-          <TransactionHistory />
+          <ScrollArea style={{ height: 250 }}>
+            <TransactionHistory />
+          </ScrollArea>
         </div>
       </div>
     </div>
