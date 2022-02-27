@@ -8,19 +8,34 @@ import { useStore } from "../utils/store";
 import Web3 from "web3";
 import { ThemeProvider } from "@emotion/react";
 import theme from "../styles/theme";
+import { useCookies } from "react-cookie";
 
 export default function App(props) {
   const { Component, pageProps } = props;
   const [queryClient] = React.useState(() => new QueryClient());
-  const setWeb3 = useStore((state) => state.setWeb3);
+  const [setWeb3, network, setNetwork] = useStore((state) => [
+    state.setWeb3,
+    state.network,
+    state.setNetwork,
+  ]);
+  const [cookies] = useCookies();
+
+  const changeNetowrk = () => {
+    if (cookies["network"]) {
+      setNetwork(cookies["network"]);
+    }
+  };
 
   useEffect(() => {
     const NODE_URL =
-      "https://speedy-nodes-nyc.moralis.io/418f8e6973f3c5924015ef94/avalanche/testnet";
+      network === "testnet"
+        ? "https://speedy-nodes-nyc.moralis.io/418f8e6973f3c5924015ef94/avalanche/testnet"
+        : "http://127.0.0.1:9650/ext/bc/C/rpc";
     const provider = new Web3.providers.HttpProvider(NODE_URL);
     const web3 = new Web3(provider);
     setWeb3(web3);
-  }, []);
+    changeNetowrk();
+  }, [network]);
 
   return (
     <>

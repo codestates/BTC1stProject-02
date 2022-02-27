@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { useCookies } from "react-cookie";
 import TransactionCard from "./transactionCard";
 
 const Container = styled.div`
@@ -12,23 +13,40 @@ const Container = styled.div`
   border-radius: 4px;
 `;
 
-const getTransactions = () =>
-  axios
-    .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/transaction`)
-    .then(({ data: { tx } }) => tx);
-
 const TransactionBoard = () => {
+  // console.log(cookies["network"]);
+  // console.log(`network=${cookies["network"]};`);
+
+  // const getTransactions = () =>
+  //   axios
+  //     .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/transaction`, {
+  //       withCredentials: true,
+  //       headers: { Cookie: `network=${cookies["network"]};` },
+  //     })
+  //     .then(({ data: { tx } }) => tx);
+
   const {
     // isSuccess,
     data: transactions,
     // isLoading,
     // isError,
-  } = useQuery("getTransactions", () => getTransactions(), {
-    refetchInterval: 2000,
-    refetchIntervalInBackground: false,
-    keepPreviousData: true,
-    notifyOnChangeProps: "tracked",
-  });
+  } = useQuery(
+    "getTransactions",
+    () =>
+      axios
+        .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/transaction`, {
+          withCredentials: true,
+          // headers: { Cookie: `network=${cookies["network"]};` },
+        })
+        .then(({ data: { tx } }) => tx),
+    {
+      refetchInterval: 2000,
+      refetchIntervalInBackground: false,
+      keepPreviousData: true,
+      notifyOnChangeProps: "tracked",
+    }
+    // { headers: { Cookie: `network=${cookies["network"]};` } }
+  );
 
   return (
     <Container>
