@@ -1,36 +1,41 @@
 const { Tx } = require("../models");
 
 module.exports = {
-  getTransactions: async (req, res) => {
+  getTransactions: async (req, res, next) => {
     // if (!req.cookies["network"]) {
     //   console.log(req.cookies["network"]);
     //   return;
     // }
-    console.log("---Called getTransactions---");
-    // console.log(req.network);
-    // console.log(req.cookies["network"]);
-    console.log(typeof req.network, req.network);
-    try {
-      let tx = await Tx.findAll({
-        limit: 10,
-        order: [["createdAt", "DESC"]],
-        where: {
-          // network: req.cookies["network"],
-          network: req.network,
-        },
-      });
+    if (!req.network) {
+      next();
+    } else {
+      // console.log("---Called getTransactions---");
+      // console.log(req.network);
 
-      console.log(tx.dataValues);
-      res.status(200).send({
-        tx,
-      });
-    } catch (err) {
-      console.log(err);
-      res.status(404).send({
-        message: "server error",
-        errMsg: err,
-      });
+      try {
+        let tx = await Tx.findAll({
+          limit: 10,
+          order: [["createdAt", "DESC"]],
+          where: {
+            // network: req.cookies["network"],
+            network: req.network,
+          },
+        });
+
+        res.status(200).send({
+          tx,
+        });
+      } catch (err) {
+        console.log(err);
+        res.status(404).send({
+          message: "server error",
+          errMsg: err,
+        });
+      }
     }
+
+    // console.log(req.cookies["network"]);
+    // console.log(typeof req.network, req.network);
   },
   setNetwork: async (req, res) => {
     try {

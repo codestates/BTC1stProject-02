@@ -13,12 +13,12 @@ const PORT = 4000;
 // const web3 = new Web3(new Web3.providers.HttpProvider(BLOCKCHAIN_NETWORK));
 // global.web3 = web3;
 
-const Web3 = require("web3");
-const NODE_URL =
-  "https://speedy-nodes-nyc.moralis.io/418f8e6973f3c5924015ef94/avalanche/testnet";
-const provider = new Web3.providers.HttpProvider(NODE_URL);
-const web3 = new Web3(provider);
-global.web3 = web3;
+// const Web3 = require("web3");
+// const NODE_URL =
+//   "https://speedy-nodes-nyc.moralis.io/418f8e6973f3c5924015ef94/avalanche/testnet";
+// const provider = new Web3.providers.HttpProvider(NODE_URL);
+// const web3 = new Web3(provider);
+// global.web3 = web3;
 
 app.use(
   cors({

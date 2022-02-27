@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { getNetworkAndWeb3, getWeb3 } = require("../controllers/middlewares.js");
 const {
   createUser,
   getUser,
@@ -8,8 +9,8 @@ const {
   restore,
 } = require("../controllers/user.js");
 
-router.post("/", createUser);
-router.get("/", verifyToken, getUser);
+router.post("/", getNetworkAndWeb3, createUser);
+router.get("/", verifyToken, getWeb3, getUser);
 router.post("/transfer", verifyToken, transfer);
 router.post("/login", login);
 router.post("/restore", restore);

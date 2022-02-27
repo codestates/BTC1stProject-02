@@ -1,7 +1,6 @@
 const { User } = require("../models");
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
-const { response } = require("express");
 
 const makeSalt = (length) => {
   let result = "";
@@ -37,32 +36,32 @@ const getPk = async (address) => {
   return decryptedPk;
 };
 
-const sendTransaction = async (fromAddress, toAddress, pk, amount, web3) => {
+const sendTransaction = async (fromAddress, toAddress, pk, amount, req) => {
   // console.log(fromAddress, toAddress, pk, amount);
 
   let tx = {
     from: fromAddress,
     to: toAddress,
-    value: web3.utils.toWei(amount, "ether"),
+    value: req.web3.utils.toWei(amount, "ether"),
     gas: 21000,
   };
-  // tx["gas"] = await web3.eth.estimateGas(tx);
+  // tx["gas"] = await req.web3.eth.estimateGas(tx);
   // console.log(tx);
 
-  await web3.eth.accounts.privateKeyToAccount(pk);
+  await req.web3.eth.accounts.privateKeyToAccount(pk);
 
-  const signedTx = await web3.eth.accounts.signTransaction(tx, pk);
+  const signedTx = await req.web3.eth.accounts.signTransaction(tx, pk);
   // console.log(signedTx);
 
   // const signedTx = await ownerAccount.signTransaction(tx);
-  return await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+  return await req.web3.eth.sendSignedTransaction(signedTx.rawTransaction);
   // .on("receipt", console.log);
 };
 
-const createUser = async (password, address = null, privateKey = null) => {
+const createUser = async (req, password, address = null, privateKey = null) => {
   let newAccount;
   if (!address && !privateKey) {
-    newAccount = await web3.eth.accounts.create();
+    newAccount = await req.web3.eth.accounts.create();
     address = newAccount.address;
     privateKey = newAccount.privateKey;
   }
@@ -117,7 +116,7 @@ module.exports = {
   createUser: async (req, res) => {
     try {
       const { password } = req.body;
-      const [address, privateKey, token] = await createUser(password);
+      const [address, privateKey, token] = await createUser(req, password);
 
       res.status(200).send({
         newUser: { address, pk: privateKey, accessToken: token },
@@ -135,7 +134,7 @@ module.exports = {
       // pk, password 입력으로 받는다
       const { pk, password } = req.body;
 
-      const account = await web3.eth.accounts.privateKeyToAccount(pk);
+      const account = await req.web3.eth.accounts.privateKeyToAccount(pk);
       console.log(account);
 
       const user = await getUser(account.address);
@@ -151,6 +150,7 @@ module.exports = {
         // 2) user가 DB에 없는 경우
         // 유저 생성 로직을 거치고 토큰 반환
         const [address, privateKey, token] = await createUser(
+          req,
           password,
           account.address,
           pk
@@ -176,24 +176,32 @@ module.exports = {
     login(address, password, res);
   },
   getUser: async (req, res) => {
+    // console.log("--- Called getUser ---");
+    // console.log(req.network);
+    // console.log(req.web3);
+
     const address = req.address;
-    const resBalance = web3.utils.fromWei(
-      await web3.eth.getBalance(address),
+    const resBalance = req.web3.utils.fromWei(
+      await req.web3.eth.getBalance(address),
       "ether"
     );
+    // console.log(await req.web3.eth.getBlockNumber());
+    // console.log(await req.web3.eth.net.getId());
     // console.log(resBalance);
 
     const user = await getUser(address);
 
-    if (resBalance !== user.balance) {
-      user.balance = resBalance;
-      await user.save();
-    }
+    // 네트워크 2개기 때문에 DB에 저장된 balance는 사용하지 않음
+    // 현재 연결된 네트워크에서 가져온 밸런스를 그대로 프론트엔드로 전달
+    // if (resBalance !== user.balance) {
+    //   user.balance = resBalance;
+    //   await user.save();
+    // }
 
     return res.status(200).json({
       user: {
         address: user.address,
-        balance: user.balance,
+        balance: resBalance,
       },
     });
   },
@@ -230,7 +238,7 @@ module.exports = {
         toAddress,
         pk,
         amount,
-        web3
+        req
       );
 
       if (result?.status !== null) {
