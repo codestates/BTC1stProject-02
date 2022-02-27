@@ -1,6 +1,10 @@
 import { Select } from "@mantine/core";
 import { useStore } from "../../utils/store";
 
+const TestNetwork = () => {
+  return <div>Test Network</div>;
+};
+
 const NetworkSelector = () => {
   const [network, setNetwork] = useStore((state) => [
     state.network,

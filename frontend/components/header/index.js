@@ -30,8 +30,10 @@ const Title = styled.h1`
   display: flex;
   align-items: center;
   font-size: 28px;
-  font-weight: bold;
+  // font-weight: bold;
   margin-left: 15px;
+  letter-spacing: 3px;
+  font-weight: 500;
 `;
 
 const CActionIcon = styled(ActionIcon)`
