@@ -1,19 +1,15 @@
 import { Button } from "@mantine/core";
-import { useCallback, useEffect } from "react";
 import { useQuery } from "react-query";
 import { useStore } from "../../utils/store";
+import TransactionHistory from "./transactionHistory";
 
 const Asset = () => {
-  const [user, updateUser, setActiveTab] = useStore((state) => [
+  const [user, setUser, setActiveTab] = useStore((state) => [
     state.user,
-    state.updateUser,
+    state.setUser,
     state.setActiveTab,
   ]);
   const Axios = useStore((state) => state.Axios);
-  const [network, sendingAmount] = useStore((state) => [
-    state.network,
-    state.sendingAmount,
-  ]);
 
   useQuery(
     "getUser",
@@ -21,8 +17,8 @@ const Asset = () => {
       await Axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/user`, {
         withCredentials: true,
       }).then(({ data: { user: resUser } }) => {
-        // console.log(resUser);
-        updateUser("balance", resUser.balance);
+        console.log(resUser);
+        setUser(resUser);
         return resUser;
       });
     },
@@ -69,7 +65,18 @@ const Asset = () => {
         >
           보내기
         </Button>
-        <div>활동내역</div>
+        <div>
+          <div
+            style={{
+              fontSize: "20px",
+              fontWeight: "500",
+              margin: "15px 20px",
+            }}
+          >
+            활동 내역
+          </div>
+          <TransactionHistory />
+        </div>
       </div>
     </div>
   );

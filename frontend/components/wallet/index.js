@@ -71,7 +71,7 @@ const Wallet = () => {
         }}
         title="BTC - 02 - AVALANCHE"
       >
-        {user?.accessToken && <WalletHeader />}
+        {user?.address && <WalletHeader />}
         {walletTabs[activeTab]}
       </CModal>
       <ToastContainer
