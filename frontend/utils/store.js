@@ -37,4 +37,6 @@ export const useStore = create((set) => ({
   setSendingAmount: (sendingAmount) => set({ sendingAmount }),
   receiverAddress: "",
   setReceiverAddress: (receiverAddress) => set({ receiverAddress }),
+  network: "testnet",
+  setNetwork: (network) => set({ network }),
 }));

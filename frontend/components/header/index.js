@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { ActionIcon } from "@mantine/core";
 import { AiOutlineWallet } from "react-icons/ai";
-import theme from "../../styles/theme";
 import { useStore } from "../../utils/store";
+import NetworkSelector from "../networkSelector";
 
 const Container = styled.div`
   height: 70px;
@@ -14,7 +14,7 @@ const Container = styled.div`
 `;
 
 const Badge = styled.div`
-  margin-right: 10px;
+  margin-right: 15px;
   border: 1px solid rgba(231, 245, 255, 1);
   border-radius: 4px;
   padding: 2px 4px;
@@ -45,6 +45,12 @@ const CActionIcon = styled(ActionIcon)`
   }
 `;
 
+const RightHeader = styled.div`
+  && .mantine-Select-root {
+    margin-right: 20px;
+  }
+`;
+
 const compressAddress = (address) => {
   return `${address?.slice(0, 4)}....${address?.slice(-4)}`;
 };
@@ -69,9 +75,10 @@ const Header = () => {
             fill="#ffffff"
           ></path>
         </svg>
-        <Title>BTC - 02 - AVALANCHE</Title>
+        <Title>AVALANCHE</Title>
       </div>
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <RightHeader style={{ display: "flex", alignItems: "center" }}>
+        <NetworkSelector />
         {user?.address && user?.accessToken && (
           <Badge>{compressAddress(user.address)}</Badge>
         )}
@@ -85,7 +92,7 @@ const Header = () => {
             style={{ width: 40, height: 40 }}
           />
         </CActionIcon>
-      </div>
+      </RightHeader>
     </Container>
   );
 };

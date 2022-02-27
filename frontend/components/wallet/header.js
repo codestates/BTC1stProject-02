@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Button, Select, Tooltip } from "@mantine/core";
 import { useState } from "react";
 import { useStore } from "../../utils/store";
+import NetworkSelector from "../networkSelector";
 
 const Container = styled.div`
   display: flex;
@@ -29,7 +30,6 @@ const WalletHeader = () => {
     state.setUser,
     state.setActiveTab,
   ]);
-  const [value, setValue] = useState("testnet");
 
   const handleClickLock = () => {
     let user = localStorage.getItem("user");
@@ -44,14 +44,7 @@ const WalletHeader = () => {
   return (
     <Container>
       <div style={{ flex: "1.3", paddingRight: "15px" }}>
-        <Select
-          value={value}
-          data={[
-            { value: "testnet", label: "Test Network" },
-            { value: "localnet", label: "Local Network" },
-          ]}
-          onChange={setValue}
-        />
+        <NetworkSelector />
       </div>
       <div
         style={{
