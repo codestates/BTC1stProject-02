@@ -135,18 +135,18 @@ module.exports = {
       const { pk, password } = req.body;
 
       const account = await req.web3.eth.accounts.privateKeyToAccount(pk);
-      console.log(account);
+      // console.log(account);
 
       const user = await getUser(account.address);
       // console.log(user);
       if (user) {
-        console.log("1");
+        // console.log("1");
         // 1) user가 DB에 있는 경우
         // 패스워드가 맞는지 확인
         // 로그인시켜서 토큰 반환
         login(account.address, password, res);
       } else {
-        console.log("2");
+        // console.log("2");
         // 2) user가 DB에 없는 경우
         // 유저 생성 로직을 거치고 토큰 반환
         const [address, privateKey, token] = await createUser(
@@ -155,7 +155,7 @@ module.exports = {
           account.address,
           pk
         );
-        console.log(address, privateKey, token);
+        // console.log(address, privateKey, token);
 
         res.status(200).send({
           address,
