@@ -19,7 +19,7 @@ const Badge = styled.div`
   border-radius: 4px;
   padding: 2px 4px;
 
-  font-size: 12px;
+  font-size: 16px;
   font-weight: bold;
 
   color: #228be6;
