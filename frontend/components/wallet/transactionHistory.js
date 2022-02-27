@@ -75,7 +75,7 @@ const TransactionCard = ({ tx }) => {
       </div>
       <div
         style={{
-          flex: "2",
+          flex: "2.5",
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-end",

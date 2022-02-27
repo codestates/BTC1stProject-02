@@ -81,9 +81,7 @@ const Header = () => {
       </div>
       <RightHeader style={{ display: "flex", alignItems: "center" }}>
         <NetworkSelector />
-        {user?.address && user?.accessToken && (
-          <Badge>{compressAddress(user.address)}</Badge>
-        )}
+        {user?.address && <Badge>{compressAddress(user.address)}</Badge>}
         <CActionIcon
           onClick={() => {
             setOpened(true);

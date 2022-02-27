@@ -17,7 +17,7 @@ const Asset = () => {
       await Axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/user`, {
         withCredentials: true,
       }).then(({ data: { user: resUser } }) => {
-        console.log(resUser);
+        // console.log(resUser);
         setUser(resUser);
         return resUser;
       });
