@@ -70,7 +70,7 @@ const task = cron.schedule(
               `==== 블록 모니터링 완료 : ${startBlockNumber} ~ ${currentBlockNumber} ====`
             );
             fs.writeFileSync(
-              path.join(basePath, "./utils/blockNumber"),
+              path.join(basePath, "./utils/blockNumber-local"),
               String(currentBlockNumber)
             );
             taskRunning = false;
