@@ -46,33 +46,32 @@ export default function App(props) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          /** Put your mantine theme override here */
-          colorScheme: "light",
-        }}
-      >
-        <ThemeProvider theme={theme}>
-          <Layout>
-            <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            /** Put your mantine theme override here */
+            colorScheme: "light",
+          }}
+        >
+          <ThemeProvider theme={theme}>
+            <Layout>
               <Component {...pageProps} />
               <ReactQueryDevtools initialIsOpen={false} />
-            </QueryClientProvider>
-          </Layout>
-        </ThemeProvider>
+            </Layout>
+          </ThemeProvider>
 
-        <style jsx global>{`
-          /* Other global styles such as 'html, body' etc... */
+          <style jsx global>{`
+            /* Other global styles such as 'html, body' etc... */
 
-          body {
-            background-color: black !important;
-            color: white !important;
-          }
-        `}</style>
-      </MantineProvider>
+            body {
+              background-color: black !important;
+              color: white !important;
+            }
+          `}</style>
+        </MantineProvider>
+      </QueryClientProvider>
     </>
   );
 }

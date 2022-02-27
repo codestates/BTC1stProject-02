@@ -1,5 +1,6 @@
 import { Button } from "@mantine/core";
 import { useCallback, useEffect } from "react";
+import { useQuery } from "react-query";
 import { useStore } from "../../utils/store";
 
 const Asset = () => {
@@ -14,22 +15,41 @@ const Asset = () => {
     state.sendingAmount,
   ]);
 
-  const getUser = useCallback(async () => {
-    if (user) {
-      const {
-        data: { user: resUser },
-      } = await Axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/user`, {
+  useQuery(
+    "getUser",
+    async () => {
+      await Axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/user`, {
         withCredentials: true,
+      }).then(({ data: { user: resUser } }) => {
+        // console.log(resUser);
+        updateUser("balance", resUser.balance);
+        return resUser;
       });
-      updateUser("balance", resUser.balance);
-    } else {
-      console.log("User State가 존재하지 않습니다.");
+    },
+    {
+      refetchInterval: 2000,
+      refetchIntervalInBackground: false,
+      keepPreviousData: true,
+      notifyOnChangeProps: "tracked",
     }
-  }, []);
+  );
 
-  useEffect(() => {
-    getUser();
-  }, [getUser, sendingAmount, network]);
+  // const getUser = useCallback(async () => {
+  //   if (user) {
+  //     const {
+  //       data: { user: resUser },
+  //     } = await Axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/user`, {
+  //       withCredentials: true,
+  //     });
+  //     updateUser("balance", resUser.balance);
+  //   } else {
+  //     console.log("User State가 존재하지 않습니다.");
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   getUser();
+  // }, [getUser, sendingAmount, network]);
 
   return (
     <div>

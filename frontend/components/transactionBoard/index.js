@@ -14,8 +14,8 @@ const Container = styled.div`
 const TransactionBoard = () => {
   const { data: transactions } = useQuery(
     "getTransactions",
-    () =>
-      axios
+    async () =>
+      await axios
         .get(`${process.env.NEXT_PUBLIC_SERVER_URL}/transaction`, {
           withCredentials: true,
         })
