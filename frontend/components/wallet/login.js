@@ -1,6 +1,7 @@
 import { Button, Input } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import axios from "axios";
+import { RiDownloadFill } from "react-icons/ri";
 import { getCurrentUser } from "../../utils/auth";
 import { useStore } from "../../utils/store";
 import { WalletTitle } from "./style";
@@ -46,14 +47,16 @@ const Login = () => {
         >
           <Button onClick={handleUnlock}>잠금해제</Button>
         </div>
-        <small
-          style={{ cursor: "pointer" }}
+        <div
+          style={{ display: "flex", cursor: "pointer" }}
           onClick={() => {
             setActiveTab("RESTORE");
           }}
         >
-          개인키로 계정 복구
-        </small>
+          <RiDownloadFill style={{ width: 24, height: 24, color: "grey" }} />
+
+          <div style={{ marginLeft: "5px" }}>개인키로 계정 복구</div>
+        </div>
       </div>
     </div>
   );
