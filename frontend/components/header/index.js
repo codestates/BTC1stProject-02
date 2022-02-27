@@ -53,7 +53,7 @@ const RightHeader = styled.div`
   }
 `;
 
-const compressAddress = (address) => {
+export const compressAddress = (address) => {
   return `${address?.slice(0, 4)}....${address?.slice(-4)}`;
 };
 
