@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { ActionIcon } from "@mantine/core";
 import { AiOutlineWallet } from "react-icons/ai";
-import theme from "../../styles/theme";
 import { useStore } from "../../utils/store";
+import NetworkSelector from "../networkSelector";
 
 const Container = styled.div`
   height: 70px;
@@ -14,12 +14,12 @@ const Container = styled.div`
 `;
 
 const Badge = styled.div`
-  margin-right: 10px;
+  margin-right: 15px;
   border: 1px solid rgba(231, 245, 255, 1);
   border-radius: 4px;
   padding: 2px 4px;
 
-  font-size: 12px;
+  font-size: 16px;
   font-weight: bold;
 
   color: #228be6;
@@ -30,8 +30,10 @@ const Title = styled.h1`
   display: flex;
   align-items: center;
   font-size: 28px;
-  font-weight: bold;
+  // font-weight: bold;
   margin-left: 15px;
+  letter-spacing: 3px;
+  font-weight: 500;
 `;
 
 const CActionIcon = styled(ActionIcon)`
@@ -42,6 +44,12 @@ const CActionIcon = styled(ActionIcon)`
 
   &: hover {
     background-color: ${(props) => props.theme.colors.lightGrey};
+  }
+`;
+
+const RightHeader = styled.div`
+  && .mantine-Select-root {
+    margin-right: 20px;
   }
 `;
 
@@ -69,9 +77,10 @@ const Header = () => {
             fill="#ffffff"
           ></path>
         </svg>
-        <Title>BTC - 02 - AVALANCHE</Title>
+        <Title>AVALANCHE</Title>
       </div>
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <RightHeader style={{ display: "flex", alignItems: "center" }}>
+        <NetworkSelector />
         {user?.address && user?.accessToken && (
           <Badge>{compressAddress(user.address)}</Badge>
         )}
@@ -85,7 +94,7 @@ const Header = () => {
             style={{ width: 40, height: 40 }}
           />
         </CActionIcon>
-      </div>
+      </RightHeader>
     </Container>
   );
 };

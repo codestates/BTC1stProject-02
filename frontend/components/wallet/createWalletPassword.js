@@ -3,6 +3,7 @@ import { useInputState } from "@mantine/hooks";
 import axios from "axios";
 import { useStore } from "../../utils/store";
 import { WalletTitle } from "./style";
+import BackButton from "../backButton";
 
 const CreateWalletPassword = () => {
   const [setActiveTab, setUser] = useStore((state) => [
@@ -16,9 +17,15 @@ const CreateWalletPassword = () => {
   const createUser = async () => {
     const {
       data: { newUser },
-    } = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/user`, {
-      password,
-    });
+    } = await axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/user`,
+      {
+        password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
 
     localStorage.setItem(
       "user",
@@ -33,12 +40,13 @@ const CreateWalletPassword = () => {
 
   return (
     <div>
-      <small
+      <BackButton nextTab={previousTab} />
+      {/* <small
         style={{ cursor: "pointer" }}
         onClick={() => setActiveTab(previousTab)}
       >
         뒤로
-      </small>
+      </small> */}
       <WalletTitle>암호 생성</WalletTitle>
       <Input
         style={{ marginBottom: "15px" }}

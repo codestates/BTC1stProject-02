@@ -27,6 +27,9 @@ const Sign = () => {
       {
         toAddress: receiverAddress,
         amount: sendingAmount,
+      },
+      {
+        withCredentials: true,
       }
     );
 

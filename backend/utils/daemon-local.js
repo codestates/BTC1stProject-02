@@ -1,6 +1,5 @@
 const Web3 = require("web3");
-const NODE_URL =
-  "https://speedy-nodes-nyc.moralis.io/418f8e6973f3c5924015ef94/avalanche/testnet";
+const NODE_URL = "http://127.0.0.1:9650/ext/bc/C/rpc";
 const provider = new Web3.providers.HttpProvider(NODE_URL);
 const web3 = new Web3(provider);
 const { Tx } = require("../models");
@@ -66,7 +65,7 @@ const storeTx = async (tx) => {
   await Tx.findOrCreate({
     where: { tx_hash: tx.hash },
     defaults: {
-      network: "testnet",
+      network: "localnet",
       tx_hash: tx.hash,
       from: tx.from,
       to: tx.to,

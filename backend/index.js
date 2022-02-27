@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
-var cors = require("cors");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 // const account = require("./routes/account");
 require("dotenv").config();
 const transaction = require("./routes/transaction.js");
@@ -12,12 +13,12 @@ const PORT = 4000;
 // const web3 = new Web3(new Web3.providers.HttpProvider(BLOCKCHAIN_NETWORK));
 // global.web3 = web3;
 
-const Web3 = require("web3");
-const NODE_URL =
-  "https://speedy-nodes-nyc.moralis.io/418f8e6973f3c5924015ef94/avalanche/testnet";
-const provider = new Web3.providers.HttpProvider(NODE_URL);
-const web3 = new Web3(provider);
-global.web3 = web3;
+// const Web3 = require("web3");
+// const NODE_URL =
+//   "https://speedy-nodes-nyc.moralis.io/418f8e6973f3c5924015ef94/avalanche/testnet";
+// const provider = new Web3.providers.HttpProvider(NODE_URL);
+// const web3 = new Web3(provider);
+// global.web3 = web3;
 
 app.use(
   cors({
@@ -26,6 +27,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(cookieParser());
 
 // web3.eth.getAccounts().then((accounts) => {
 //   console.log(accounts);
