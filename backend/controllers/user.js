@@ -1,4 +1,5 @@
-const { User } = require("../models");
+const { Op } = require("@sequelize/core");
+const { User, Tx } = require("../models");
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 
@@ -190,6 +191,15 @@ module.exports = {
     // console.log(resBalance);
 
     const user = await getUser(address);
+    const myTx = await Tx.findAll({
+      limit: 10,
+      order: [["id", "DESC"]],
+      where: {
+        // network: req.cookies["network"],
+        network: req.network,
+        [Op.or]: [{ from: req.address }, { to: req.address }],
+      },
+    });
 
     // 네트워크 2개기 때문에 DB에 저장된 balance는 사용하지 않음
     // 현재 연결된 네트워크에서 가져온 밸런스를 그대로 프론트엔드로 전달
@@ -202,6 +212,7 @@ module.exports = {
       user: {
         address: user.address,
         balance: resBalance,
+        myTx,
       },
     });
   },
