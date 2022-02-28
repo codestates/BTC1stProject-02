@@ -89,7 +89,7 @@ const TransferAmount = () => {
           <Button color="gray">취소</Button>
           <Button
             onClick={() => {
-              if (amount <= user.balance) {
+              if (parseFloat(amount) < parseFloat(user.balance)) {
                 setSendingAmount(amount);
                 setActiveTab("SIGN");
               } else {
