@@ -17,6 +17,7 @@ const TransferTo = () => {
   const [setActiveTab] = useStore((state) => [state.setActiveTab]);
   const [user, Axios] = useStore((state) => [state.user, state.Axios]);
   const [latestReceivers, setLatestReceivers] = useState([]);
+  const network = useStore((state) => state.network);
 
   const handleClickNext = () => {
     const valid = web3.utils.isAddress(toAddress);
@@ -29,7 +30,7 @@ const TransferTo = () => {
     }
   };
 
-  const getMyFromAddress = async () => {
+  const getLatestReceivers = async () => {
     const {
       data: { latestReceivers },
     } = await Axios.get(
@@ -43,8 +44,8 @@ const TransferTo = () => {
   };
 
   useEffect(() => {
-    getMyFromAddress();
-  }, [user]);
+    getLatestReceivers();
+  }, [user, network]);
 
   return (
     <div>
