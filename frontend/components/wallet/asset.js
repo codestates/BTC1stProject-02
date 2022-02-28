@@ -17,8 +17,7 @@ const Asset = () => {
       await Axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/user`, {
         withCredentials: true,
       }).then(({ data: { user: resUser } }) => {
-        console.log(resUser);
-        if (resUser.balance !== user.balance) {
+        if (JSON.stringify(resUser.myTx) !== JSON.stringify(user.myTx)) {
           setUser(resUser);
         }
         return resUser;

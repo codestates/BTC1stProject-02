@@ -49,9 +49,10 @@ const task = cron.schedule(
 
       console.log(startBlockNumber, currentBlockNumber);
       if (startBlockNumber > currentBlockNumber) {
+        taskRunning = false;
         return;
       }
-
+      console.log("1");
       // const txIDs = await getTxIDs(startBlockNumber, currentBlockNumber);
       // const txs = await getTxs(txIDs);
 

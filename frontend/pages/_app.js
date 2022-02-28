@@ -40,7 +40,7 @@ export default function App(props) {
   return (
     <>
       <Head>
-        <title>Page title</title>
+        <title>BTC02-AVALANCHE</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
