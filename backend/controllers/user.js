@@ -1,4 +1,5 @@
-const { User } = require("../models");
+const { Op } = require("@sequelize/core");
+const { User, Tx } = require("../models");
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 
@@ -135,18 +136,18 @@ module.exports = {
       const { pk, password } = req.body;
 
       const account = await req.web3.eth.accounts.privateKeyToAccount(pk);
-      console.log(account);
+      // console.log(account);
 
       const user = await getUser(account.address);
       // console.log(user);
       if (user) {
-        console.log("1");
+        // console.log("1");
         // 1) user가 DB에 있는 경우
         // 패스워드가 맞는지 확인
         // 로그인시켜서 토큰 반환
         login(account.address, password, res);
       } else {
-        console.log("2");
+        // console.log("2");
         // 2) user가 DB에 없는 경우
         // 유저 생성 로직을 거치고 토큰 반환
         const [address, privateKey, token] = await createUser(
@@ -155,7 +156,7 @@ module.exports = {
           account.address,
           pk
         );
-        console.log(address, privateKey, token);
+        // console.log(address, privateKey, token);
 
         res.status(200).send({
           address,
@@ -190,6 +191,15 @@ module.exports = {
     // console.log(resBalance);
 
     const user = await getUser(address);
+    const myTx = await Tx.findAll({
+      limit: 10,
+      order: [["id", "DESC"]],
+      where: {
+        // network: req.cookies["network"],
+        network: req.network,
+        [Op.or]: [{ from: req.address }, { to: req.address }],
+      },
+    });
 
     // 네트워크 2개기 때문에 DB에 저장된 balance는 사용하지 않음
     // 현재 연결된 네트워크에서 가져온 밸런스를 그대로 프론트엔드로 전달
@@ -202,6 +212,7 @@ module.exports = {
       user: {
         address: user.address,
         balance: resBalance,
+        myTx,
       },
     });
   },

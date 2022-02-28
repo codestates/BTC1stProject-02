@@ -53,7 +53,7 @@ const RightHeader = styled.div`
   }
 `;
 
-const compressAddress = (address) => {
+export const compressAddress = (address) => {
   return `${address?.slice(0, 4)}....${address?.slice(-4)}`;
 };
 
@@ -77,13 +77,11 @@ const Header = () => {
             fill="#ffffff"
           ></path>
         </svg>
-        <Title>AVALANCHE</Title>
+        <Title>BTC02-AVALANCHE</Title>
       </div>
       <RightHeader style={{ display: "flex", alignItems: "center" }}>
         <NetworkSelector />
-        {user?.address && user?.accessToken && (
-          <Badge>{compressAddress(user.address)}</Badge>
-        )}
+        {user?.address && <Badge>{compressAddress(user.address)}</Badge>}
         <CActionIcon
           onClick={() => {
             setOpened(true);

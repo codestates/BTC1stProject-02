@@ -48,7 +48,7 @@ const TransactionCard = ({ tx }) => {
           <span>From {compressHash(tx.from)}</span>
           <span>To {compressHash(tx.to)}</span>
         </TransferInfo>
-        <div>{tx.value} AVAX</div>
+        <div>{parseFloat(tx.value).toFixed(3)} AVAX</div>
       </Container>
     </animated.div>
   );

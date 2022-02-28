@@ -1,35 +1,53 @@
-import { Button } from "@mantine/core";
-import { useCallback, useEffect } from "react";
+import { Button, ScrollArea } from "@mantine/core";
+import { useQuery } from "react-query";
 import { useStore } from "../../utils/store";
+import TransactionHistory from "./transactionHistory";
 
 const Asset = () => {
-  const [user, updateUser, setActiveTab] = useStore((state) => [
+  const [user, setUser, setActiveTab] = useStore((state) => [
     state.user,
-    state.updateUser,
+    state.setUser,
     state.setActiveTab,
   ]);
   const Axios = useStore((state) => state.Axios);
-  const [network, sendingAmount] = useStore((state) => [
-    state.network,
-    state.sendingAmount,
-  ]);
 
-  const getUser = useCallback(async () => {
-    if (user) {
-      const {
-        data: { user: resUser },
-      } = await Axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/user`, {
+  useQuery(
+    "getUser",
+    async () => {
+      await Axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/user`, {
         withCredentials: true,
+      }).then(({ data: { user: resUser } }) => {
+        console.log(resUser);
+        if (resUser.balance !== user.balance) {
+          setUser(resUser);
+        }
+        return resUser;
       });
-      updateUser("balance", resUser.balance);
-    } else {
-      console.log("User State가 존재하지 않습니다.");
+    },
+    {
+      refetchInterval: 2000,
+      refetchIntervalInBackground: false,
+      keepPreviousData: true,
+      notifyOnChangeProps: "tracked",
     }
-  }, []);
+  );
 
-  useEffect(() => {
-    getUser();
-  }, [getUser, sendingAmount, network]);
+  // const getUser = useCallback(async () => {
+  //   if (user) {
+  //     const {
+  //       data: { user: resUser },
+  //     } = await Axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/user`, {
+  //       withCredentials: true,
+  //     });
+  //     updateUser("balance", resUser.balance);
+  //   } else {
+  //     console.log("User State가 존재하지 않습니다.");
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   getUser();
+  // }, [getUser, sendingAmount, network]);
 
   return (
     <div>
@@ -49,7 +67,20 @@ const Asset = () => {
         >
           보내기
         </Button>
-        <div>활동내역</div>
+        <div>
+          <div
+            style={{
+              fontSize: "20px",
+              fontWeight: "500",
+              margin: "15px 20px",
+            }}
+          >
+            활동 내역
+          </div>
+          <ScrollArea style={{ height: 250 }}>
+            <TransactionHistory />
+          </ScrollArea>
+        </div>
       </div>
     </div>
   );

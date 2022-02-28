@@ -11,6 +11,7 @@ const NetworkSelector = () => {
 
   return (
     <Select
+      style={{ width: "140px" }}
       value={network}
       data={[
         { value: "testnet", label: "Test Network" },
