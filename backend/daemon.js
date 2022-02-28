@@ -1,11 +1,5 @@
 const cron = require("node-cron");
-const {
-  getCurrentBlockNumber,
-  getTxIDs,
-  getTxs,
-  storeTx,
-  getNewTxs,
-} = require("./utils/daemon");
+const { getCurrentBlockNumber, storeTx, getNewTxs } = require("./utils/daemon");
 const fs = require("fs");
 const path = require("path");
 const basePath = __dirname;
@@ -50,6 +44,7 @@ const task = cron.schedule(
 
       console.log(startBlockNumber, currentBlockNumber);
       if (startBlockNumber > currentBlockNumber) {
+        taskRunning = false;
         return;
       }
 
