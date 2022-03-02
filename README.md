@@ -1,3 +1,5 @@
+<img width="1312" alt="스크린샷 2022-03-02 오후 2 24 45" src="https://user-images.githubusercontent.com/5072730/156300679-18e3883f-38c2-4ea6-9e5d-3067a5117297.png">
+
 - 프로젝트 소개: https://www.notion.so/2-5663eae34194485897b4b04c255b9d1c
 - 동영상 시연: https://www.youtube.com/watch?v=r2W22uVC1Vo
 
